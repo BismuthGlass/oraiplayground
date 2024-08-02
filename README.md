@@ -20,11 +20,11 @@ Services expose different functionality with the system, but do not expose any e
 
 ### Controllers
 
-Controllers are responsible for exposing APIs to the frontend, and handling high level client requests. Most of their job is delegated to Controllers.
+Controllers are responsible for exposing APIs to the frontend, and handling high level client requests. Most of their job is to serve as a layer between the services and the frontend.
 
 ### Components
 
-Components in the backend are the controllers for frontend components. Since the webapp uses HTMX, most of the UI state is reflected through Controllers, which has the benefit of also being stored for future sessions, without the need for cookies or any other kind of local storage. This greatly simplifies the application at no cost, since it is mostly meant to be hosted locally, and allows us to use Go "on the frontend" as well.
+Components are specialized Controllers which handle the functionality for specific UI elements. Since the webapp uses HTMX, most of the UI state is reflected through Controllers, which has the benefit of also being stored for future sessions, without the need for cookies or any other kind of local storage. This greatly simplifies the application at no cost, since it is mostly meant to be hosted locally, and allows us to use Go "on the frontend" as well.
 
 ### Config
 
