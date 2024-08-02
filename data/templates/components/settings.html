@@ -1,0 +1,51 @@
+<form hx-post="/settings" hx-target="this" hx-swap="outerHTML">
+    <div class="parameter-grid">
+        <label>Model</label>
+        <select name="model">
+            {{ range .Models }}
+                <option
+                    {{ if .Selected }}selected{{ end }}
+                    value="{{ .Value }}"
+                >{{ if .Name }}{{ .Name }}{{ else }}{{ .Value }}{{ end }}</option>
+            {{ end }}
+        </select>
+        <label>Prompt Template</label>
+        <select name="template">
+            {{ range .Templates }}
+                <option
+                    {{ if .Selected }}selected{{ end }}
+                    value="{{ .Value }}"
+                >{{ if .Name }}{{ .Name }}{{ else }}{{ .Value }}{{ end }}</option>
+            {{ end }}
+        </select>
+    </div>
+    
+    <div class="separator"></div>
+    
+    <div class="parameter-grid">
+        <label>Max Tokens</label>
+        <input type="text" name="maxTokens" value="{{ .MaxTokens }}">
+        <label>Temperature</label>
+        <input type="text" name="temperature" value="{{ .Temperature }}">
+        <label>Top P</label>
+        <input type="text" name="topP" value="{{ .TopP }}">
+        <label>Top K</label>
+        <input type="text" name="topK" value="{{ .TopK }}">
+        <label>Frequency Penalty</label>
+        <input type="text" name="frequencyPenalty" value="{{ .FrequencyPenalty }}">
+        <label>Presence Penalty</label>
+        <input type="text" name="presencePenalty" value="{{ .PresencePenalty }}">
+        <label>Repetition Penalty</label>
+        <input type="text" name="repetitionPenalty" value="{{ .RepetitionPenalty }}">
+    </div>
+
+    {{ if .LastError }}
+        <div class="error">
+            {{ .LastError }}
+        </div>
+    {{ end }}
+
+    <div class="separator"></div>
+
+    <button>Save</button>
+</form>

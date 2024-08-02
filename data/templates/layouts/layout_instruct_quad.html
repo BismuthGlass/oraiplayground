@@ -1,0 +1,36 @@
+<div class="story-layout">
+    <form id="editor1"
+          class="v-flex prompt-block-editor"
+          data-block-name=""></form>
+    <form id="editor2"
+          class="v-flex prompt-block-editor"
+          data-block-name=""></form>
+    <form id="editor3"
+          class="v-flex prompt-block-editor"
+          data-block-name=""></form>
+
+    <div id="ai-response" class="v-flex">
+        <div class="button-group h-flex">
+            <p data-tab-name="response">Response</p>
+            <p data-tab-name="prompt">Prompt</p>
+            <p data-tab-name="promptPreview">Prompt Preview</p>
+        </div>
+        <div class="tab v-flex" data-tab-name="response">
+            <textarea id="ai-response-response"></textarea>
+            <div class="controls">
+                <button id="ai-response-bt-generate">Generate</button>
+                <button id="ai-response-bt-continue">Continue</button>
+                <button id="ai-response-bt-cancel" disabled="true">Cancel</button>
+            </div>
+        </div>
+        <div class="tab v-flex" data-tab-name="promptPreview">
+            <textarea id="ai-response-prompt-preview"></textarea>
+            <div class="controls">
+                <button id="ai-response-bt-preview">Preview Prompt</button>
+            </div>
+        </div>
+        <div class="tab v-flex" data-tab-name="prompt">
+            <textarea id="ai-response-prompt"></textarea>
+        </div>
+    </div>
+</div>

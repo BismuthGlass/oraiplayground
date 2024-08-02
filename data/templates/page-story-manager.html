@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://unpkg.com/htmx.org@2.0.1"></script>
+        <link rel="stylesheet" href="/static/css/main.css">
+        <link rel="stylesheet" href="/static/css/story-page.css">
+        <script src="/static/js/ui.js"></script>
+    </head>
+    <body>
+        <div id="full-window-div">
+            <div id="toolbar">
+                <p data-tab-name="prompt">Stories</p>
+            </div>
+            <div class="tab" data-tab-name="prompt">
+                {{ template "tab-stories.html" . }}
+            </div>
+        </div>
+    </body>
+</html>

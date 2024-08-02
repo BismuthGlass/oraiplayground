@@ -1,0 +1,22 @@
+.story-list > div {
+    border-bottom: 1px solid black;
+    padding: 3px;
+}
+.story-list .button-group {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+}
+.story-list p {
+    margin: 0;
+}
+
+.story-list-item {
+    display: flex;
+    flex-direction: row;
+}
+
+.story-list-new form {
+    display: flex;
+    flex-direction: row;
+}

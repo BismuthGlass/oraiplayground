@@ -1,0 +1,11 @@
+<div class="tab-story h-flex">
+    <div class="block-list-panel">
+        {{ template "components/prompt_block_list.html" .PromptBlockList }}
+    </div>
+
+    {{ if eq .Mode "chat" }}
+        {{ template "layouts/layout_chat.html" . }}
+    {{ else }}
+        {{ template "layouts/layout_quad.html" . }}
+    {{ end }}
+</div>

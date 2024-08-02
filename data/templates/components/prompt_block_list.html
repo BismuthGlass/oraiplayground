@@ -1,0 +1,105 @@
+<div id="prompt-block-list"
+     hx-target="#block-list"
+     hx-select="#block-list"
+     hx-swap="outerHTML">
+    <div class="hidden">
+        <form hx-put="/promptBlockList"
+              hx-trigger="prompt-block-list-update">
+            <input name="moveTargetBlock" type="hidden">
+            <input name="moveDestinationBlock" type="hidden">
+            <input name="moveDestinationGroup" type="hidden">
+        </form>
+    </div>
+
+    <div class="operations v-flex">
+        <form class="v-flex"
+              hx-post="/promptBlock">
+            <input type="text" name="name">
+            <select name="type">
+                <option value="block" selected>Block</option>
+                <option value="group">Group</option>
+            </select>
+            <button>New</button>
+        </form>
+        <form class="v-flex"
+              hx-confirm="Are you sure you want to delete these blocks?"
+              hx-post="/promptBlock/delete">
+            <input type="text" name="blocks" placeholder="block1,block2,..." required>
+            <button>Delete</button>
+        </form>
+    </div>
+
+    <div class="separator"></div>
+    
+    <div id="block-list" class="block-list">
+        {{ range .Items }}
+            {{ if .IsGroup }}
+                <div data-is-group="true"
+                     data-name="{{ .Name }}"
+                     draggable="true">
+                    <div>
+                        <input type="checkbox"
+                               {{ if .Active }}checked{{ end }}
+                               name="active"
+                               hx-target="#prompt-block-list"
+                               hx-swap="none"
+                               hx-put="/activatePromptBlock"
+                               hx-vals='{"name": "{{ .Name }}"}'>
+                    </div>
+                    <p>{{ .Name }}</p>
+                    <div class="button-group operations">
+                        <p>Edit</p>
+                    </div>
+                </div>
+
+                {{ if and .IsEmptyGroup (not .IsCollapsed) }}
+                    <div class="in-group empty-group"
+                         data-parent="{{ .Name }}">
+                        <p>Empty</p>
+                    </div>
+                {{ end }}
+            {{ else }}
+                {{ if .Parent }}
+                    <div class="in-group"
+                         data-is-group="false"
+                         data-name="{{ .Name }}"
+                         data-parent="{{ .Parent }}"
+                         draggable="true">
+                        <div>
+                            <input type="checkbox"
+                                   {{ if .Active }}checked{{ end }}
+                                   name="active"
+                                   hx-target="#prompt-block-list"
+                                   hx-swap="none"
+                                   hx-put="/activatePromptBlock"
+                                   hx-vals='{"name": "{{ .Name }}"}'>
+                        </div>
+                        <p>{{ .Name }}</p>
+                        <div class="button-group operations">
+                            <p>Edit</p>
+                        </div>
+                    </div>
+                {{ else }}
+                    <div data-is-group="false"
+                         data-name="{{ .Name }}"
+                         data-parent="{{ .Parent }}"
+                         draggable="true">
+                        <div>
+                            <input type="checkbox"
+                                   {{ if .Active }}checked{{ end }}
+                                   name="active"
+                                   hx-target="#prompt-block-list"
+                                   hx-swap="none"
+                                   hx-put="/activatePromptBlock"
+                                   hx-vals='{"name": "{{ .Name }}"}'>
+                        </div>
+                        <p>{{ .Name }}</p>
+                        <div class="button-group operations">
+                            <p>Edit</p>
+                        </div>
+                    </div>
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    </div>
+</div>

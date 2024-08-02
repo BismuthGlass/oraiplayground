@@ -1,0 +1,67 @@
+<form id="{{ .EditorId }}"
+      class="v-flex prompt-block-editor"
+      data-block-name="{{ .Name }}"
+      hx-put="/blockEditor?eid={{ .EditorId }}&block={{ .Name }}"
+      hx-target="this"
+      hx-swap="none"
+      hx-trigger="{{ .EditorId }}-save">
+    {{ if .Name }}
+        <div class="h-flex">
+            <p>{{ .Name }} <span class="modified-indicator"></span></p>
+            <div class="align-right">
+                {{ if eq .Mode "chat" }}
+                    <select name="role">
+                        {{ range .RoleOptions }}
+                            <option value="{{ .Value }}"
+                                    {{ if .Selected }} selected {{ end }}>
+                                {{ or .Name .Value }}
+                            </option>
+                        {{ end }}
+                    </select>
+                {{ else if eq .Mode "instruct" }}
+                    <select name="section">
+                        {{ range .SectionOptions }}
+                            <option value="{{ .Value }}"
+                                    {{ if .Selected }} selected {{ end }}>
+                                {{ or .Name .Value }}
+                            </option>
+                        {{ end }}
+                    </select>
+                {{ end }}
+            </div>
+        </div>
+        {{ if .IsGroup }}
+            <div class="v-flex info-block" data-tab="group">
+                <p>Group Prefix</p>
+                <textarea name="prefix">{{ .Prefix }}</textarea>
+                <p>Group Suffix</p>
+                <textarea name="suffix">{{ .Suffix }}</textarea>
+            </div>
+        {{ else }}
+            <div class="v-flex info-block" data-tab="block">
+                <p>Text</p>
+                <textarea name="text">{{ .Text }}</textarea>
+            </div>
+        {{ end }}
+
+        <div class="h-flex operations">
+            <button class="save-bt" 
+                    disabled="true">
+                Save
+            </button>
+            <button type="button"
+                    class="discard-bt" 
+                    disabled="true"
+                    hx-get="/blockEditor?eid={{ .EditorId }}&block={{ .Name }}"
+                    hx-swap="outerHTML">
+                Discard
+            </button>
+            <button type="button" 
+                    class="close-bt"
+                    hx-get="/blockEditor?eid={{ .EditorId }}"
+                    hx-swap="outerHTML">
+                Close
+            </button>
+        </div>
+    {{ end }}
+</form>

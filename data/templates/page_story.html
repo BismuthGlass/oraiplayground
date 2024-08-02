@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://unpkg.com/htmx.org@2.0.1"></script>
+        <link rel="stylesheet" href="/static/css/main.css">
+        <script type="module" src="/static/js/ui.js"></script>
+    </head>
+    <body>
+        <div id="full-window-div">
+            <div id="navigation">
+                <p data-tab-name="story">Story</p>
+                <p data-tab-name="settings">Settings</p>
+            </div>
+            <div class="tab" data-tab-name="story">
+                {{ template "tab_story.html" . }}
+            </div>
+            <div class="tab" data-tab-name="settings">
+                {{ template "components/settings.html" .Settings }}
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,23 @@
+<form class="message-editor" 
+      data-message-id="{{ .Id }}"
+      hx-target="this"
+      hx-put="/chatMessage">
+    <div class="top-controllers">
+        <select name="role">
+            {{ range $index, $option := .RoleOptions }}
+                <option value="{{ $option.Value }}"
+                        {{ if eq $option.Value .Role }} selected {{ end }}>
+                    {{ or .Name .Value }}
+                </option>
+            {{ end }}
+        </select>
+    </div>
+    <textarea name="text">{{ .Text }}</textarea>
+    <div class="buttons">
+        <button>Save</button>
+        {{ if .LastMessage }}
+            <button type="button" class="bt-continue">Continue</button>
+            <button type="button" class="bt-cancel">Cancel</button>
+        {{ end }}
+    </div>
+</form>
