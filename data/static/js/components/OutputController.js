@@ -37,7 +37,7 @@ export class OutputController {
         }
         
         //let data = new FormData()
-        fetch("/promptRequest", {
+        fetch("/aiRequest", {
             method: "POST",
             body: data, 
         })
@@ -45,7 +45,7 @@ export class OutputController {
         .then((data) => {
             this.requestId = data.id
             this.btCancel.disabled = false
-            fetch(`/promptRequest?id=${data.id}`, {
+            fetch(`/aiRequest?id=${data.id}`, {
                 method: "GET",
             })
             .then(data => data.json())
@@ -73,7 +73,7 @@ export class OutputController {
 
     cancelPendingRequest() {
         if (this.requestId) {
-            fetch(`/promptRequestDelete?id=${this.requestId}`, {
+            fetch(`/aiRequest?id=${this.requestId}`, {
                 method:"DELETE"
             })
         }

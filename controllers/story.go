@@ -118,7 +118,7 @@ func deletePromptBlock(w http.ResponseWriter, r *http.Request) {
 	state.TmplEngine.PromptBlockList(w, &ctx)
 }
 
-func postAiPromptRequest(w http.ResponseWriter, r *http.Request) {
+func postAiRequest(w http.ResponseWriter, r *http.Request) {
 	state := storyRetrieveState(r.Context())
 	err := r.ParseMultipartForm(10000)
 	if err != nil {
@@ -211,7 +211,7 @@ func InstallStoryController(router *mux.Router) {
 	router.HandleFunc("/blockEditor", putBlockEditor).Methods("PUT")
 	router.HandleFunc("/promptBlock", postPromptBlock).Methods("POST")
 	router.HandleFunc("/promptBlock/delete", deletePromptBlock).Methods("POST")
-	router.HandleFunc("/promptRequest", postAiPromptRequest).Methods("POST")
+	router.HandleFunc("/aiRequest", postAiRequest).Methods("POST")
 	router.HandleFunc("/aiRequest", getAiRequest).Methods("GET")
 	router.HandleFunc("/aiRequest", deleteAiRequest).Methods("DELETE")
 	router.HandleFunc("/promptPreview", getPromptPreview).Methods("GET")
