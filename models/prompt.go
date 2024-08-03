@@ -273,6 +273,8 @@ func (root *PromptBlock) IntoPrompt(template string) string {
 		return root.IntoAlpacaPrompt()
 	case "llama3":
 		return root.IntoLlama3Prompt()
+	case "llama3_1":
+		return root.IntoLlama3_1Prompt()
 	case "gemma":
 		return root.IntoGemmaPrompt()
 	default:
@@ -312,6 +314,11 @@ func (root *PromptBlock) IntoAlpacaPrompt() string {
 func (root *PromptBlock) IntoLlama3Prompt() string {
 	simplePrompt := root.IntoSimplePrompt()
 	return simplePrompt.IntoLlama3Prompt()
+}
+
+func (root *PromptBlock) IntoLlama3_1Prompt() string {
+	simplePrompt := root.IntoSimplePrompt()
+	return simplePrompt.IntoLlama3_1Prompt()
 }
 
 func (root *PromptBlock) IntoGemmaPrompt() string {

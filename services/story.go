@@ -60,11 +60,14 @@ func NewStory(aiServer *AiServer) *Story {
 			{ Value: "lizpreciatior/lzlv-70b-fp16-hf" },
 			{ Value: "meta-llama/llama-3-70b-instruct" },
 			{ Value: "google/gemma-2-9b-it" },
+			{ Value: "meta-llama/llama-3.1-70b-instruct" },
+			{ Value: "meta-llama/llama-3.1-405b-instruct" },
 		},
 		AvailableTemplates: []utils.SelectOption{
 			{ Value: "none", Name: "None" },
 			{ Value: "alpaca", Name: "Alpaca" },
 			{ Value: "llama3", Name: "Llama 3" },
+			{ Value: "llama3_1", Name: "Llama 3.1" },
 			{ Value: "gemma", Name: "Gemma" },
 		},
 	}
