@@ -55,6 +55,7 @@ func getBlockEditor(w http.ResponseWriter, r *http.Request) {
 	block, exists := state.StoryService.Story.PromptRoot.GetBlock(r.Form.Get("block"))
 
 	blockEditor := templates.PromptBlockEditor{
+		Mode: state.StoryService.Story.Settings.Mode,
 		EditorId: r.Form.Get("eid"),
 		SectionOptions: models.PromptBlockSectionOptions(),
 		RoleOptions: models.PromptBlockRoleOptions(),

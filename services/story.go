@@ -44,7 +44,7 @@ func NewStory(aiServer *AiServer) *Story {
 		},
 	}
 	storyModel.Settings.SetParameters(orai.DefaultAIParameters())
-	storyModel.Settings.Mode = models.StoryModeChat
+	storyModel.Settings.Mode = models.StoryModeInstruct
 	storyModel.Settings.Model = "lizpreciatior/lzlv-70b-fp16-hf"
 	storyModel.Settings.Template = "alpaca"
 
