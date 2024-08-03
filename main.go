@@ -18,7 +18,7 @@ import (
 func main() {
 	config.LoadConfig()
 
-	tmpl, err := webutil.LoadTemplates("data/templates")
+	tmpl, err := webutil.LoadTemplates("data/templates", []string{".html"})
 	if err != nil {
 		fmt.Println(err)
 		return
