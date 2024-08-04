@@ -1,22 +1,12 @@
 package models
 
 import (
-	"crow/orai"
 	"crow/oraiplayground/utils"
-	"net/url"
 )
 
-type StoryMode string
-const (
-	StoryModeText = "text"
-	StoryModeChat = "chat"
-	StoryModeInstruct = "instruct"
-)
-
-type StorySettings struct {
+type AiSettings struct {
 	Model             string
 	Template          string
-	Mode              StoryMode
 	MaxTokens         int
 	Temperature       float64
 	TopP              float64
@@ -26,7 +16,7 @@ type StorySettings struct {
 	RepetitionPenalty float64
 }
 
-func (s *StorySettings) SetParameters(params orai.Parameters) {
+func (s *AiSettings) SetParameters(params orai.Parameters) {
 	s.MaxTokens = params.MaxTokens
 	s.Temperature = params.Temperature
 	s.TopP = params.TopP
@@ -36,7 +26,7 @@ func (s *StorySettings) SetParameters(params orai.Parameters) {
 	s.RepetitionPenalty = params.RepetitionPenalty
 }
 
-func (s *StorySettings) GetParameters() orai.Parameters {
+func (s *AiSettings) GetParameters() orai.Parameters {
 	return orai.Parameters{
 		MaxTokens:         s.MaxTokens,
 		Temperature:       s.Temperature,
@@ -48,7 +38,7 @@ func (s *StorySettings) GetParameters() orai.Parameters {
 	}
 }
 
-func (s *StorySettings) ParseFormData(form url.Values) (lastError error) {
+func (s *AiSettings) ParseFormData(form url.Values) (lastError error) {
 	if form.Has("model") {
 		s.Model = form.Get("model")
 	}
@@ -112,22 +102,4 @@ func (s *StorySettings) ParseFormData(form url.Values) (lastError error) {
 		}
 	}
 	return
-}
-
-type Story struct {
-	Id    int64
-	Title string
-	Settings StorySettings
-	PromptRoot *PromptBlock
-	ChatMessages []orai.ChatMessage
-	Text string
-}
-
-func NewStory(id int64, title string) Story {
-	settings := StorySettings{}
-	settings.SetParameters(orai.DefaultAIParameters())
-	return Story{
-		Settings: settings,
-		PromptRoot: &PromptBlock{},
-	}
 }
