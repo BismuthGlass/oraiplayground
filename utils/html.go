@@ -1,5 +1,14 @@
 package utils
 
+import (
+	"bytes"
+)
+
+type Select struct {
+	Options []SelectOption
+	Value string
+}
+
 type SelectOption struct {
 	Value    string
 	Name     string
@@ -14,4 +23,9 @@ func SetSelection(options []SelectOption, value string) {
 			options[i].Selected = false
 		}
 	}
+}
+
+func TFunRenderSelectOptions(s *Select) string {
+	var buffer bytes.Buffer
+	return buffer.String()
 }

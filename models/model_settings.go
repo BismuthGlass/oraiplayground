@@ -1,10 +1,12 @@
 package models
 
 import (
+	"crow/orai"
 	"crow/oraiplayground/utils"
+	"net/url"
 )
 
-type AiSettings struct {
+type ModelSettings struct {
 	Model             string
 	Template          string
 	MaxTokens         int
@@ -16,7 +18,7 @@ type AiSettings struct {
 	RepetitionPenalty float64
 }
 
-func (s *AiSettings) SetParameters(params orai.Parameters) {
+func (s *ModelSettings) SetParameters(params orai.Parameters) {
 	s.MaxTokens = params.MaxTokens
 	s.Temperature = params.Temperature
 	s.TopP = params.TopP
@@ -26,7 +28,7 @@ func (s *AiSettings) SetParameters(params orai.Parameters) {
 	s.RepetitionPenalty = params.RepetitionPenalty
 }
 
-func (s *AiSettings) GetParameters() orai.Parameters {
+func (s *ModelSettings) GetParameters() orai.Parameters {
 	return orai.Parameters{
 		MaxTokens:         s.MaxTokens,
 		Temperature:       s.Temperature,
@@ -38,7 +40,7 @@ func (s *AiSettings) GetParameters() orai.Parameters {
 	}
 }
 
-func (s *AiSettings) ParseFormData(form url.Values) (lastError error) {
+func (s *ModelSettings) ParseFormData(form url.Values) (lastError error) {
 	if form.Has("model") {
 		s.Model = form.Get("model")
 	}

@@ -3,6 +3,7 @@ package templates
 import (
 	"crow/oraiplayground/models"
 	"crow/oraiplayground/utils"
+	"crow/oraiplayground/config"
 	"io"
 	"log"
 )
@@ -18,6 +19,29 @@ type StorySettings struct {
 	PresencePenalty   float64
 	RepetitionPenalty float64
 	LastError         error
+}
+
+func NewStorySettings(story *models.Story, err error) StorySettings {
+	models := make([]utils.SelectOption, len(config.AvailableModels))
+	_ = copy(models, config.AvailableModels)
+	utils.SetSelection(models, story.ModelSettings.Model)
+
+	aiTemplates := make([]utils.SelectOption, len(config.AvailableTemplates))
+	_ = copy(aiTemplates, config.AvailableTemplates)
+	utils.SetSelection(aiTemplates, story.ModelSettings.Template)
+	
+	return StorySettings{
+		Models: models,
+		Templates: aiTemplates,
+		MaxTokens: story.ModelSettings.MaxTokens,
+		Temperature: story.ModelSettings.Temperature,
+		TopP: story.ModelSettings.TopP,
+		TopK: story.ModelSettings.TopK,
+		FrequencyPenalty: story.ModelSettings.FrequencyPenalty,
+		PresencePenalty: story.ModelSettings.PresencePenalty,
+		RepetitionPenalty: story.ModelSettings.RepetitionPenalty,
+		LastError: err,
+	}
 }
 
 func (e *Engine) Settings(w io.Writer, ctx *StorySettings) error {
@@ -36,7 +60,14 @@ type Story struct {
 	Mode models.StoryMode
 	Settings StorySettings
 	PromptBlockList PromptBlockList
-	PromptBlockEditors []PromptBlockEditor
+}
+
+func NewStory(story *models.Story) Story {
+	return Story{
+		Mode: story.Mode,
+		Settings: NewStorySettings(story, nil),
+		PromptBlockList: NewPromptBlockList(story),
+	}
 }
 
 func (e *Engine) StoryPage(w io.Writer, ctx *Story) error {

@@ -26,9 +26,9 @@ func main() {
 	tmplEngine := &templates.Engine{
 		Template: tmpl,
 	}
-	
-	aiServerService := services.NewAiServer()
 
+	aiServerService := services.NewAiServer()
+	storyDatabaseService := services.NewStoryDatabase()
 	storyService := services.NewStory(&aiServerService)
 
 	go aiServerService.Run()
@@ -38,18 +38,18 @@ func main() {
 	rt := mux.NewRouter()
 	rt.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("data/static"))))
 	controllers.InstallStoryController(rt)
-	controllers.InstallPromptBlockController(rt)
 	controllers.InstallTestsController(rt)
 
 	// Start services
 	// go appState.AIService.Run()
 
 	httpConfig := http.Server{
-		Addr: ":8080",
+		Addr:    ":8080",
 		Handler: rt,
 		BaseContext: func(l net.Listener) context.Context {
 			ctx := context.Background()
 			ctx = context.WithValue(ctx, templates.EngineCtxKey, tmplEngine)
+			ctx = context.WithValue(ctx, services.StoryDatabaseCtxKey, storyDatabaseService)
 			ctx = context.WithValue(ctx, services.StoryCtxKey, storyService)
 			return ctx
 		},

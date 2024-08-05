@@ -26,3 +26,9 @@ go.work.sum
 
 # config files
 config.yml
+
+# scratch and local docs
+scratch
+
+# Temp files
+*.swp
