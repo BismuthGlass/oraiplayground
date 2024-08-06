@@ -1,3 +1,17 @@
+{{ define "block_row" }}
+	{{ $favouriteClass := "favourite-no" }}
+	{{ if .Favorite }}
+		{{ $favoriteClass := "favourite-yes" }}
+	{{ end }}
+	<tr data-block-name="{{ .Name }}">
+		<td>&gt;</td>
+		<td class="{{ $favouriteClass }}"><span>★</span></td>
+		<td>{{ .Name }}</td>
+		<td class="edit-block"><span>✎</span></td>
+	</tr>
+{{ end }}
+
+{{ define "block_editor" }}
 <form id="{{ .EditorId }}"
       class="v-flex prompt-block-editor"
       data-block-name="{{ .Name }}"
@@ -65,3 +79,20 @@
         </div>
     {{ end }}
 </form>
+	<tr data-block-name="{{ .Name }}">
+		<td colspan="4">
+		</td>
+	</tr>
+{{ end }}
+
+{{/* ----------------------- */}}
+
+{{ if eq .Mode "table" }}
+<table data-story="{{ .Table.StoryName }}">
+	{{ range .Table.Rows }}
+		{{ template "block_row" . }}
+	{{ end }}
+</table>
+{{ else if eq .Mode "row" }}
+	{{ template "block_row" .Row }}
+{{ end }}

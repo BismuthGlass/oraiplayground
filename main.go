@@ -33,15 +33,10 @@ func main() {
 
 	go aiServerService.Run()
 
-	// appState.AIService = NewAIService()
-
 	rt := mux.NewRouter()
 	rt.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("data/static"))))
 	controllers.InstallStoryController(rt)
 	controllers.InstallTestsController(rt)
-
-	// Start services
-	// go appState.AIService.Run()
 
 	httpConfig := http.Server{
 		Addr:    ":8080",
