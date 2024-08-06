@@ -32,6 +32,11 @@ func (s *Story) GetPromptBlock(name string) *PromptBlock {
 }
 
 func NewStory(name string, description string, storyMode StoryMode, defaultModelSettings ModelSettings) Story {
+	blocks := []PromptBlock {
+		{ Name: "block_1", Text: "" },
+		{ Name: "block_2", Text: "" },
+		{ Name: "block_3", Text: "" },
+	}
 	promptPresets := make(map[string]*PromptSettings)
 	promptPresets["default"] = &PromptSettings{}
 	return Story{
@@ -40,6 +45,7 @@ func NewStory(name string, description string, storyMode StoryMode, defaultModel
 		Mode: storyMode,
 		ModelSettings: defaultModelSettings,
 		ActivePromptPreset: "default",
+		PromptBlocks: blocks,
 		PromptPresets: promptPresets,
 	}
 }

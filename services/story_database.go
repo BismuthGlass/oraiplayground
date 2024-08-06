@@ -44,15 +44,8 @@ func (db *StoryDatabase) NewStory(name string, description string) error {
 	if existingStory != nil {
 		return errors.New("exists")
 	}
-	promptPresets := make(map[string]*models.PromptSettings)
-	promptPresets["default"] = &models.PromptSettings{}
-	newStory := models.Story{
-		Name: name,
-		Description: description,
-		ModelSettings: db.defaultModelSettings,
-		PromptPresets: promptPresets,
-	}
-	db.Stories = append(db.Stories, newStory)
+
+	db.Stories = append(db.Stories, models.NewStory(name, description, models.StoryModeInstruct, db.defaultModelSettings))
 	return nil
 }
 
