@@ -5,7 +5,6 @@ import (
 	"crow/oraiplayground/models"
 	"crow/oraiplayground/services"
 	"crow/oraiplayground/templates"
-	"crow/oraiplayground/utils"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -28,8 +27,7 @@ func storyRetrieveState(ctx context.Context) *Story {
 func getIndex(w http.ResponseWriter, r *http.Request) {
 	state := storyRetrieveState(r.Context())
 	story := state.StoryDatabaseService.LockForRead("default")
-	ctx := templates.NewStory(story)
-	_ = state.TmplEngine.StoryPage(w, &ctx)
+	_ = state.TmplEngine.StoryPage(w, story)
 }
 
 func postSettings(w http.ResponseWriter, r *http.Request) {
@@ -42,25 +40,25 @@ func postSettings(w http.ResponseWriter, r *http.Request) {
 }
 
 func getBlockEditor(w http.ResponseWriter, r *http.Request) {
-	state := storyRetrieveState(r.Context())
-	r.ParseForm()
+	//state := storyRetrieveState(r.Context())
+	//r.ParseForm()
 
-	story := state.StoryDatabaseService.LockForRead("default")
-	block := story.GetPromptBlock(r.Form.Get("block"))
+	//story := state.StoryDatabaseService.LockForRead("default")
+	//block := story.GetPromptBlock(r.Form.Get("block"))
 
-	blockEditor := templates.PromptBlockEditor{
-		Mode: story.Mode,
-		EditorId: r.Form.Get("eid"),
-		SectionOptions: models.PromptBlockSectionOptions(),
-		RoleOptions: models.PromptBlockRoleOptions(),
-	}
-	if block != nil {
-		blockEditor.Name = block.Name
-		blockEditor.Text = block.Text
-		utils.SetSelection(blockEditor.RoleOptions, string(block.Role))
-	}
+	//blockEditor := templates.PromptBlockEditor{
+	//	Mode: story.Mode,
+	//	EditorId: r.Form.Get("eid"),
+	//	SectionOptions: models.PromptBlockSectionOptions(),
+	//	RoleOptions: models.PromptBlockRoleOptions(),
+	//}
+	//if block != nil {
+	//	blockEditor.Name = block.Name
+	//	blockEditor.Text = block.Text
+	//	utils.SetSelection(blockEditor.RoleOptions, string(block.Role))
+	//}
 
-	_ = state.TmplEngine.PromptBlockEditor(w, &blockEditor)
+	//_ = state.TmplEngine.PromptBlockEditor(w, &blockEditor)
 }
 
 func putBlockEditor(w http.ResponseWriter, r *http.Request) {
