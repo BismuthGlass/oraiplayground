@@ -28,19 +28,20 @@
 	<div class="separator"></div>
 
 	<div id="block-list" class="block-list">
-		{{ range .Items }}
-		<div data-name="{{ .Name }}"
+		{{ $storyName := .StoryName }}
+		{{ range $item := .Items }}
+		<div data-name="{{ $item.Name }}"
 		     draggable="true">
 			<div>
 				<input type="checkbox"
-				       {{ if .Active }}checked{{ end }}
+				       {{ if $item.Active }}checked{{ end }}
 				       name="active"
 				       hx-target="#prompt-block-list"
 				       hx-swap="none"
-				       hx-put="/story/{{ .StoryName }}/activatePromptBlock"
-				       hx-vals='{"name": "{{ .Name }}"}'>
+				       hx-put="/story/{{ $storyName }}/activatePromptBlock"
+				       hx-vals='{"name": "{{ $item.Name }}"}'>
 			</div>
-			<p>{{ .Name }}</p>
+			<p>{{ $item.Name }}</p>
 			<div class="button-group operations">
 				<p>Edit</p>
 			</div>

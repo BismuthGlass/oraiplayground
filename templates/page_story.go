@@ -60,6 +60,7 @@ type Story struct {
 	Mode models.StoryMode
 	Settings StorySettings
 	PromptBlockList PromptBlockList
+	PromptBlockEditor PromptBlockEditor
 }
 
 func NewStory(story *models.Story) Story {
@@ -67,11 +68,13 @@ func NewStory(story *models.Story) Story {
 		Mode: story.Mode,
 		Settings: NewStorySettings(story, nil),
 		PromptBlockList: NewPromptBlockList(story),
+		PromptBlockEditor: NewPromptBlockEditorTable(story),
 	}
 }
 
-func (e *Engine) StoryPage(w io.Writer, ctx *Story) error {
-	err := e.Template.ExecuteTemplate(w, "page_story.html", ctx)
+func (e *Engine) StoryPage(w io.Writer, story *models.Story) error {
+	ctx := NewStory(story)
+	err := e.Template.ExecuteTemplate(w, "page_story.html", &ctx)
 	if err != nil {
 		log.Println(err)
 	}

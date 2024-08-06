@@ -9,10 +9,14 @@
         <div id="full-window-div">
             <div id="navigation">
                 <p data-tab-name="story">Story</p>
+		<p data-tab-name="prompt">Prompt</p>
                 <p data-tab-name="settings">Settings</p>
             </div>
             <div class="tab" data-tab-name="story">
                 {{ template "tab_story.html" . }}
+            </div>
+            <div class="tab" data-tab-name="prompt">
+                {{ template "tab_prompt.html" .PromptBlockEditor }}
             </div>
             <div class="tab" data-tab-name="settings">
                 {{ template "components/settings.html" .Settings }}
