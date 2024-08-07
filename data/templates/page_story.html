@@ -2,7 +2,7 @@
 <html>
     <head>
         <script src="https://unpkg.com/htmx.org@2.0.1"></script>
-        <link rel="stylesheet" href="/static/css/main.css">
+        <link rel="stylesheet" href="/static/css/story-page.css">
         <script type="module" src="/static/js/ui.js"></script>
     </head>
     <body>
@@ -12,11 +12,11 @@
 		<p data-tab-name="prompt">Prompt</p>
                 <p data-tab-name="settings">Settings</p>
             </div>
-            <div class="tab" data-tab-name="story">
+            <div class="tab tab-story h-flex" data-tab-name="story">
                 {{ template "tab_story.html" . }}
             </div>
-            <div class="tab" data-tab-name="prompt">
-                {{ template "tab_prompt.html" .PromptBlockEditor }}
+            <div class="tab tab-prompt h-flex" data-tab-name="prompt">
+                {{ template "tab_prompt.html" . }}
             </div>
             <div class="tab" data-tab-name="settings">
                 {{ template "components/settings.html" .Settings }}

@@ -18,10 +18,15 @@ type PromptBlockEditorTable struct {
 	Rows []PromptBlockEditorRow
 }
 
+type PromptBlockEditorForm struct {
+	StoryName string
+	Name string
+}
+
 type PromptBlockEditor struct {
-	Mode string
+	Component string
 	Table PromptBlockEditorTable
-	Row PromptBlockEditorRow
+	Form PromptBlockEditorForm
 }
 
 func NewPromptBlockEditorTable(story *models.Story) PromptBlockEditor {
@@ -37,11 +42,29 @@ func NewPromptBlockEditorTable(story *models.Story) PromptBlockEditor {
 		})
 	}
 	return PromptBlockEditor{
-		Mode: "table",
+		Component: "table",
 		Table: PromptBlockEditorTable{
 			StoryName: story.Name,
 			Rows: rows,
 		},
+	}
+}
+
+func NewPromptBlockEditorForm(storyName string, block *models.PromptBlock) PromptBlockEditor {
+	var form PromptBlockEditorForm
+	if block != nil {
+		form = PromptBlockEditorForm{
+			StoryName: storyName,
+			Name: block.Name,
+		}
+	} else {
+		form = PromptBlockEditorForm{
+			StoryName: storyName,
+		}
+	}
+	return PromptBlockEditor{
+		Component: "form",
+		Form: form,
 	}
 }
 

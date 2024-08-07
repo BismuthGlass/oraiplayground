@@ -1,98 +1,101 @@
 {{ define "block_row" }}
-	{{ $favouriteClass := "favourite-no" }}
+	{{ $favoriteClass := "favorite-no" }}
 	{{ if .Favorite }}
-		{{ $favoriteClass := "favourite-yes" }}
+		{{ $favoriteClass := "favorite-yes" }}
 	{{ end }}
-	<tr data-block-name="{{ .Name }}">
-		<td>&gt;</td>
-		<td class="{{ $favouriteClass }}"><span>★</span></td>
-		<td>{{ .Name }}</td>
-		<td class="edit-block"><span>✎</span></td>
-	</tr>
+	<div class="pblock-row"
+	     data-block-name="{{ .Name }}">
+		<div class="{{ $favoriteClass }}"><span class="op-favorite icon">★</span></div>
+		<div class="name">{{ .Name }}</div>
+		<div class="commands">
+			<span class="op-delete icon">⨯</span> 
+			<span class="op-edit icon">✎</span>
+		</div>
+	</div>
 {{ end }}
 
-{{ define "block_editor" }}
-<form id="{{ .EditorId }}"
-      class="v-flex prompt-block-editor"
+{{ define "form" }}
+<form class="v-flex prompt-block-editor"
       data-block-name="{{ .Name }}"
-      hx-put="/blockEditor?eid={{ .EditorId }}&block={{ .Name }}"
       hx-target="this"
       hx-swap="none"
-      hx-trigger="{{ .EditorId }}-save">
-    {{ if .Name }}
-        <div class="h-flex">
-            <p>{{ .Name }} <span class="modified-indicator"></span></p>
-            <div class="align-right">
-                {{ if eq .Mode "chat" }}
-                    <select name="role">
-                        {{ range .RoleOptions }}
-                            <option value="{{ .Value }}"
-                                    {{ if .Selected }} selected {{ end }}>
-                                {{ or .Name .Value }}
-                            </option>
-                        {{ end }}
-                    </select>
-                {{ else if eq .Mode "instruct" }}
-                    <select name="section">
-                        {{ range .SectionOptions }}
-                            <option value="{{ .Value }}"
-                                    {{ if .Selected }} selected {{ end }}>
-                                {{ or .Name .Value }}
-                            </option>
-                        {{ end }}
-                    </select>
-                {{ end }}
-            </div>
-        </div>
-        {{ if .IsGroup }}
-            <div class="v-flex info-block" data-tab="group">
-                <p>Group Prefix</p>
-                <textarea name="prefix">{{ .Prefix }}</textarea>
-                <p>Group Suffix</p>
-                <textarea name="suffix">{{ .Suffix }}</textarea>
-            </div>
-        {{ else }}
-            <div class="v-flex info-block" data-tab="block">
-                <p>Text</p>
-                <textarea name="text">{{ .Text }}</textarea>
-            </div>
-        {{ end }}
+      hx-trigger="editorSave">
+	{{ if .Name }}
+		Currently editing {{ .Name }}!
+	{{ else }}
+		No editor open...
+	{{ end }}
+	{{/*{{ if .Name }}
+	<div class="h-flex">
+		<p>{{ .Name }} <span class="modified-indicator"></span></p>
+		<div class="align-right">
+			{{ if eq .Mode "chat" }}
+			<select name="role">
+				{{ range .RoleOptions }}
+				<option value="{{ .Value }}"
+					{{ if .Selected }} selected {{ end }}>
+				{{ or .Name .Value }}
+				</option>
+				{{ end }}
+			</select>
+			{{ else if eq .Mode "instruct" }}
+			<select name="section">
+				{{ range .SectionOptions }}
+				<option value="{{ .Value }}"
+					{{ if .Selected }} selected {{ end }}>
+				{{ or .Name .Value }}
+				</option>
+				{{ end }}
+			</select>
+			{{ end }}
+		</div>
+	</div>
+	{{ if .IsGroup }}
+	<div class="v-flex info-block" data-tab="group">
+		<p>Group Prefix</p>
+		<textarea name="prefix">{{ .Prefix }}</textarea>
+		<p>Group Suffix</p>
+		<textarea name="suffix">{{ .Suffix }}</textarea>
+	</div>
+	{{ else }}
+	<div class="v-flex info-block" data-tab="block">
+		<p>Text</p>
+		<textarea name="text">{{ .Text }}</textarea>
+	</div>
+	{{ end }}
 
-        <div class="h-flex operations">
-            <button class="save-bt" 
-                    disabled="true">
-                Save
-            </button>
-            <button type="button"
-                    class="discard-bt" 
-                    disabled="true"
-                    hx-get="/blockEditor?eid={{ .EditorId }}&block={{ .Name }}"
-                    hx-swap="outerHTML">
-                Discard
-            </button>
-            <button type="button" 
-                    class="close-bt"
-                    hx-get="/blockEditor?eid={{ .EditorId }}"
-                    hx-swap="outerHTML">
-                Close
-            </button>
-        </div>
-    {{ end }}
+	<div class="h-flex operations">
+		<button class="save-bt" 
+			disabled="true">
+			Save
+		</button>
+		<button type="button"
+			class="discard-bt" 
+			disabled="true"
+			hx-get="/blockEditor?eid={{ .EditorId }}&block={{ .Name }}"
+			hx-swap="outerHTML">
+			Discard
+		</button>
+		<button type="button" 
+			class="close-bt"
+			hx-get="/blockEditor?eid={{ .EditorId }}"
+			hx-swap="outerHTML">
+			Close
+		</button>
+	</div>
+	{{ end }}*/}}
 </form>
-	<tr data-block-name="{{ .Name }}">
-		<td colspan="4">
-		</td>
-	</tr>
 {{ end }}
 
 {{/* ----------------------- */}}
 
-{{ if eq .Mode "table" }}
-<table data-story="{{ .Table.StoryName }}">
+{{ if eq .Component "table" }}
+<div class="pblock-editor-table"
+       data-story-name="{{ .Table.StoryName }}">
 	{{ range .Table.Rows }}
 		{{ template "block_row" . }}
 	{{ end }}
-</table>
-{{ else if eq .Mode "row" }}
-	{{ template "block_row" .Row }}
+</div>
+{{ else if eq .Component "form" }}
+	{{ template "form" .Form }}
 {{ end }}

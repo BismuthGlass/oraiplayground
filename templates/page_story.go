@@ -60,7 +60,8 @@ type Story struct {
 	Mode models.StoryMode
 	Settings StorySettings
 	PromptBlockList PromptBlockList
-	PromptBlockEditor PromptBlockEditor
+	PromptBlockEditorTable PromptBlockEditor
+	PromptBlockEditorForm PromptBlockEditor
 }
 
 func NewStory(story *models.Story) Story {
@@ -68,7 +69,8 @@ func NewStory(story *models.Story) Story {
 		Mode: story.Mode,
 		Settings: NewStorySettings(story, nil),
 		PromptBlockList: NewPromptBlockList(story),
-		PromptBlockEditor: NewPromptBlockEditorTable(story),
+		PromptBlockEditorTable: NewPromptBlockEditorTable(story),
+		PromptBlockEditorForm: NewPromptBlockEditorForm(story.Name, nil),
 	}
 }
 

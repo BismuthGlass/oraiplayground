@@ -1,22 +1,30 @@
-.story-list > div {
-    border-bottom: 1px solid black;
-    padding: 3px;
-}
-.story-list .button-group {
-    display: flex;
-    justify-content: flex-end;
-    flex: 1;
-}
-.story-list p {
-    margin: 0;
-}
+@import url("/static/css/main.css");
 
-.story-list-item {
-    display: flex;
-    flex-direction: row;
+.pblock-editor-table {
+	border: 1px solid black;
+	height: 100%;
+	overflow: auto;
 }
-
-.story-list-new form {
-    display: flex;
-    flex-direction: row;
+.pblock-editor-table > div {
+	border-bottom: 1px solid black;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.pblock-editor-table .pblock-row > div {
+	padding: 0 5px;	
+}
+.pblock-editor-table .name {
+	flex: 1;
+}
+.pblock-editor-table .icon {
+	font-size: 20px;
+	cursor: pointer;
+}
+.pblock-editor-table .favourite-no {
+	/*opacity: 0.5;*/
+	color: orange;
+}
+.pblock-editor-table .favourite-yes {
+	color: orange;
 }

@@ -1,7 +1,7 @@
-<div class="tab-story h-flex">
-	<div class="block-list-panel">
-		{{ template "components/prompt_block_list.html" .PromptBlockList }}
-	</div>
-
+<div class="left-panel">
+	{{ template "components/prompt_block_list.html" .PromptBlockList }}
+</div>
+<div class="right-panel">
 	{{ template "layouts/layout_instruct_quad.html" . }}
 </div>
+
