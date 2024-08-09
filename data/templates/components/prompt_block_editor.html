@@ -15,7 +15,7 @@
 {{ end }}
 
 {{ define "form" }}
-<form class="v-flex prompt-block-editor"
+<form class="v-flex pblock-editor"
       data-block-name="{{ .Name }}"
       hx-target="this"
       hx-swap="none"
@@ -91,7 +91,10 @@
 
 {{ if eq .Component "table" }}
 <div class="pblock-editor-table"
-       data-story-name="{{ .Table.StoryName }}">
+     hx-trigger="evtPromptBlockEditorListUpdate from:body"
+     hx-get="/story/{{ .Table.StoryName }}/promptBlockEditor/list"
+     hx-swap="outerHTML"
+     data-story-name="{{ .Table.StoryName }}">
 	{{ range .Table.Rows }}
 		{{ template "block_row" . }}
 	{{ end }}
