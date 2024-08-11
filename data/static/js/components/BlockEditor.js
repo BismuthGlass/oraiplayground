@@ -1,4 +1,4 @@
-class PromptBlockEditorList {
+class BlockEditorList {
 	constructor(root, storyName, deleteCallback, editCallback) {
 		this.root = root
 		this.storyName = storyName
@@ -18,7 +18,6 @@ class PromptBlockEditorList {
 			let elem = e.detail.target
 			console.log(elem)
 		})
-		console.log(root)
 		root.addEventListener("htmx:afterSettle", (e) => {
 			let elem = e.detail.target
 			console.log(elem)
@@ -51,44 +50,66 @@ class PromptBlockEditorList {
 	}
 }
 
-class PromptBlockEditorEditor {
+class BlockEditorForm {
 	constructor(root, storyName) {
+		this.root = root
 		this.storyName = storyName
-		this.blockName = ""
+		this.blockName = root.dataset.blockName
 		this.edited = false
+		console.log(this.storyName)
+
+		this.saveBt = root.getElementsByClassName("save-bt")[0]
+		this.discardBt = root.getElementsByClassName("discard-bt")[0]
+		this.closeBt = root.getElementsByClassName("close-bt")[0]
+
+		let roleSelect = root.elements["role"]
+		let text = root.elements["text"]
+		let name = root.elements["name"]
+
+		roleSelect.addEventListener("change", this.whenEdited.bind(this))
+		text.addEventListener("keypress", this.whenEdited.bind(this))
+		name.addEventListener("keypress", this.whenEdited.bind(this))
+	}
+
+	whenEdited() {
+		console.log("Edited!")
+		this.edited = true
+		this.saveBt.disabled = false
+		this.discardBt.disabled = false
+		this.closeBt.disabled = true
 	}
 
 	isEdited() {
-		return this.blockName.length > 0 && this.edited
+		return this.edited
 	}
 
 	edit(blockName) {
-		// TODO: Add discard confirmation if there is already a block being edited
-		htmx.ajax("GET", `/story/${this.storyName}/promptBlockEditor/${blockName}`, {
+		htmx.ajax("GET", `/story/${this.storyName}/blockEditor/edit/${blockName}`, {
 			target: this.root,
 			swap: "outerHTML",
 		})
 	}
 }
 
-export class PromptBlockEditorMaster {
+export class BlockEditorMaster {
 	constructor() {
 		let list = document.getElementsByClassName("pblock-editor-table")[0]
 		let editor = document.getElementsByClassName("pblock-editor")[0]
-		this.list = new PromptBlockEditorList(list, "default", this.deleteBlock.bind(this), this.editBlock.bind(this))
-		this.editor = new PromptBlockEditorEditor(editor)
+		this.list = new BlockEditorList(list, "default", this.deleteBlock.bind(this), this.editBlock.bind(this))
+		this.editor = new BlockEditorForm(editor, "default")
 
 		document.body.addEventListener("htmx:load", (e) => {
 			let elt = e.detail.elt
 			if (elt.classList.contains("pblock-editor-table")) {
-				this.list = new PromptBlockEditorList(
+				this.list = new BlockEditorList(
 					elt, 
 					"default",				
 					this.deleteBlock.bind(this),
 					this.editBlock.bind(this),
 				)
 			} else if (elt.classList.contains("pblock-editor")) {
-				this.editor = new PromptBlockEditor(elt)
+				console.log("Setting up form")
+				this.editor = new BlockEditorForm(elt, "default")
 			}
 		})
 
@@ -104,10 +125,25 @@ export class PromptBlockEditorMaster {
 
 	deleteBlock(blockName) {
 		console.log(`Delete called on ${blockName}`)
+		if (this.editor.blockName == blockName) {
+			alert("Block is open for editing")
+			return
+		}
+		if (!confirm(`Delete ${blockName}?`)) {
+			return
+		}
+		// TODO: Delete block here
 	}
 
 	editBlock(blockName) {
 		console.log(`Edit called on ${blockName}`)
+		if (this.editor.isEdited()) {
+			if (confirm("Discard changes?")) {
+				this.editor.edit(blockName)
+			}
+		} else {
+			this.editor.edit(blockName)
+		}
 	}
 }
 

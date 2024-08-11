@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crow/orai"
 	"crow/oraiplayground/utils"
-	"fmt"
 )
 
 type PromptSection string
@@ -26,7 +25,6 @@ const (
 type PromptBlock struct {
 	Name     string         `json:"name"`
 	Role     PromptRole     `json:"role"`
-	Section  PromptSection  `json:"section"`
 	Text     string         `json:"text"`
 }
 
@@ -77,19 +75,19 @@ func BlocksIntoSimplePrompt(blocks []PromptBlock) SimplePrompt {
 	var context bytes.Buffer
 	var cue bytes.Buffer
 
-	for _, b := range blocks {
-		text := b.Text
-		switch b.Section {
-		case "instruction":
-			instruction.WriteString(text)
-		case "context":
-			context.WriteString(text)
-		case "cue":
-			cue.WriteString(text)
-		default:
-			fmt.Println("Warning, unknown section:", b.Section)
-		}
-	}
+	//for _, b := range blocks {
+	//	text := b.Text
+	//	switch b.Section {
+	//	case "instruction":
+	//		instruction.WriteString(text)
+	//	case "context":
+	//		context.WriteString(text)
+	//	case "cue":
+	//		cue.WriteString(text)
+	//	default:
+	//		fmt.Println("Warning, unknown section:", b.Section)
+	//	}
+	//}
 
 	return SimplePrompt{
 		Instruction: instruction.String(),
@@ -100,11 +98,11 @@ func BlocksIntoSimplePrompt(blocks []PromptBlock) SimplePrompt {
 
 func PromptGatherSection(blocks []PromptBlock, section PromptSection) string {
 	var b bytes.Buffer
-	for _, c := range blocks {
-		if c.Section == section {
-			b.WriteString(c.Text)
-		}
-	}
+	//for _, c := range blocks {
+	//	if c.Section == section {
+	//		b.WriteString(c.Text)
+	//	}
+	//}
 	return b.String()
 }
 
@@ -175,19 +173,19 @@ func BlocksIntoLlama3_1Prompt(blocks []PromptBlock) string {
 func BlocksIntoGemmaPrompt(blocks []PromptBlock) string {
 	var turns []orai.ChatMessage
 
-	for _, block := range blocks {
-		var role orai.ChatRole
-		switch block.Section {
-		case "instruction", "context":
-			role = orai.ChatRoleUser
-		default:
-			role = orai.ChatRoleAssistant
-		}
-		turns = append(turns, orai.ChatMessage{
-			Role: role,
-			Message: block.Text,
-		})
-	}
+	//for _, block := range blocks {
+	//	var role orai.ChatRole
+	//	switch block.Section {
+	//	case "instruction", "context":
+	//		role = orai.ChatRoleUser
+	//	default:
+	//		role = orai.ChatRoleAssistant
+	//	}
+	//	turns = append(turns, orai.ChatMessage{
+	//		Role: role,
+	//		Message: block.Text,
+	//	})
+	//}
 
 	turns = orai.CollapseMessages(turns)
 	return orai.GenerateGemmaPrompt(turns, orai.ChatRoleAssistant, "")

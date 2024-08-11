@@ -1,8 +1,7 @@
-//import { Block, seedData, renderPromptBlockList } from "/static/js/prompt_block_engine.js"
 import { PromptBlockList } from "./components/PromptBlockList.js"
 import { TabController } from "./components/TabController.js"
 import { EditorLayout } from "./components/EditorLayout.js"
-import { PromptBlockEditorMaster } from "./components/PromptBlockEditor.js"
+import { BlockEditorMaster } from "./components/BlockEditor.js"
 
 class StoryMasterController {
 	constructor(root) {
@@ -41,7 +40,7 @@ function setup() {
 		},
 	)
 
-	new PromptBlockEditorMaster()
+	new BlockEditorMaster()
 
 	console.log("setup done!")
 }

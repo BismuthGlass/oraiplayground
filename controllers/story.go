@@ -204,7 +204,7 @@ func favoritePromptBlock(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Request for %s, block %s\n", storyName, blockName)
 
-	state.TmplEngine.PromptBlockEditorTable(w, story)
+	state.TmplEngine.BlockEditorList(w, story)
 }
 
 func InstallStoryController(router *mux.Router) {

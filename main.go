@@ -37,7 +37,7 @@ func main() {
 	rt.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("data/static"))))
 	controllers.InstallStoryController(rt)
 	controllers.InstallTestsController(rt)
-	controllers.InstallPromptBlockEditorController(rt)
+	controllers.InstallBlockEditorController(rt)
 
 	httpConfig := http.Server{
 		Addr:    ":8080",

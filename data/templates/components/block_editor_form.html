@@ -1,0 +1,44 @@
+<form class="v-flex pblock-editor"
+      data-block-name="{{ .Name }}"
+      hx-target="this"
+      hx-swap="outerHTML">
+	<div class="h-flex">
+		<input type="text" name="name" value="{{ .Name }}">
+		<div class="align-right">
+			<select name="role">
+				{{ range .RoleOptions }}
+				<option value="{{ .Value }}"
+					{{ if .Selected }} selected {{ end }}>
+				{{ or .Name .Value }}
+				</option>
+				{{ end }}
+			</select>
+		</div>
+	</div>
+	<div class="v-flex info-block" data-tab="block">
+		<p>Text</p>
+		<textarea name="text">{{ .Text }}</textarea>
+	</div>
+
+	<div class="info">{{ .Message }}</div>
+
+	<div class="h-flex operations">
+		<button type="button"
+			class="save-bt" 
+			disabled="true"
+			hx-post="/story/{{ .StoryName }}/blockEditor/edit/{{ .Name }}">
+			Save
+		</button>
+		<button type="button"
+			class="discard-bt" 
+			disabled="true"
+			hx-get="/story/{{ .StoryName }}/blockEditor/edit/{{ .Name }}">
+			Discard
+		</button>
+		<button type="button" 
+			class="close-bt"
+			hx-get="/story/{{ .StoryName }}/blockEditor/edit/">
+			Close
+		</button>
+	</div>
+</form>

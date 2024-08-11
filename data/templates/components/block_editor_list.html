@@ -1,0 +1,21 @@
+<div class="pblock-editor-table"
+     hx-trigger="evtPromptBlockEditorListUpdate from:body"
+     hx-get="/story/{{ .StoryName }}/promptBlockEditor/list"
+     hx-swap="outerHTML"
+     data-story-name="{{ .StoryName }}">
+	{{ range .Items }}
+		{{ $favoriteClass := "favorite-no" }}
+		{{ if .Favorite }}
+			{{ $favoriteClass := "favorite-yes" }}
+		{{ end }}
+		<div class="pblock-row"
+		     data-block-name="{{ .Name }}">
+			<div class="{{ $favoriteClass }}"><span class="op-favorite icon">★</span></div>
+			<div class="name">{{ .Name }}</div>
+			<div class="commands">
+				<span class="op-delete icon">⨯</span> 
+				<span class="op-edit icon">✎</span>
+			</div>
+		</div>
+	{{ end }}
+</div>

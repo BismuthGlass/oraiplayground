@@ -1,4 +1,4 @@
-import { PromptBlockEditor } from "./PromptBlockEditor.js";
+//import { PromptBlockEditor } from "./PromptBlockEditor.js";
 import { OutputController } from "./OutputController.js";
 
 export class EditorLayout {
@@ -11,7 +11,7 @@ export class EditorLayout {
         htmx.on(this.root, "htmx:afterSwap", (e) => {
             let target = e.target
             if (target.classList.contains("prompt-block-editor")) {
-                new PromptBlockEditor(target)
+                //new PromptBlockEditor(target)
             }
         })
     }
