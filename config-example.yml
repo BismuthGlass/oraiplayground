@@ -1,2 +1,4 @@
+server:
+  port: 8080
 openRouter:
   apiKey: your-key-here

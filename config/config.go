@@ -8,11 +8,15 @@ import (
 )
 
 type Config struct {
+	Server struct {
+		Port string `yaml:"port"`
+	} `yaml:"server"`
 	OpenRouter struct {
 		ApiKey string `yaml:"apiKey"`
 	} `yaml:"openRouter"`
 }
 
+var ServerPort string
 var ApiKey string
 var AvailableModels []utils.SelectOption
 var AvailableTemplates []utils.SelectOption
@@ -26,6 +30,7 @@ func LoadConfig() {
 	yaml.Unmarshal(data, &config)
 
 	ApiKey = config.OpenRouter.ApiKey
+	ServerPort = config.Server.Port
 
 	AvailableModels = []utils.SelectOption{
 		{ Value: "lizpreciatior/lzlv-70b-fp16-hf" },

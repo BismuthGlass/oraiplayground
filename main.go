@@ -40,7 +40,7 @@ func main() {
 	controllers.InstallBlockEditorController(rt)
 
 	httpConfig := http.Server{
-		Addr:    ":8080",
+		Addr:    fmt.Sprintf(":%s", config.ServerPort),
 		Handler: rt,
 		BaseContext: func(l net.Listener) context.Context {
 			ctx := context.Background()
@@ -51,6 +51,7 @@ func main() {
 		},
 	}
 
+	fmt.Printf("Listening on port %s...\n", config.ServerPort)
 	err = httpConfig.ListenAndServe()
 	if err != nil {
 		fmt.Println(err)

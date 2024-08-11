@@ -2,7 +2,6 @@ package models
 
 import (
 	"slices"
-	"log"
 )
 
 type PromptSettings struct {
