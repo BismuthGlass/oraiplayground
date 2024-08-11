@@ -21,10 +21,9 @@
 	font-size: 20px;
 	cursor: pointer;
 }
-.pblock-editor-table .favourite-no {
-	/*opacity: 0.5;*/
-	color: orange;
+.pblock-editor-table .favorite-no {
+	opacity: 0.5;
 }
-.pblock-editor-table .favourite-yes {
+.pblock-editor-table .favorite-yes {
 	color: orange;
 }

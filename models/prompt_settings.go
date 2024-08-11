@@ -2,6 +2,7 @@ package models
 
 import (
 	"slices"
+	"log"
 )
 
 type PromptSettings struct {
@@ -19,4 +20,12 @@ func (s *PromptSettings) enableBlock(name string) {
 
 func (s *PromptSettings) disableBlock(name string) {
 	s.EnabledBlocks = slices.DeleteFunc(s.EnabledBlocks, func(n string) bool { return n == name }) 
+}
+
+func (s *PromptSettings) toggleBlockFavorite(name string) {
+	if slices.Contains(s.FavBlocks, name) {
+		s.FavBlocks = slices.DeleteFunc(s.FavBlocks, func(n string) bool { return n == name })
+	} else {
+		s.FavBlocks = append(s.FavBlocks, name)
+	}
 }

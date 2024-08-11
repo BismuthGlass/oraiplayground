@@ -3,14 +3,21 @@
      hx-get="/story/{{ .StoryName }}/blockEditor/list"
      hx-swap="outerHTML"
      data-story-name="{{ .StoryName }}">
+	{{ $storyName := .StoryName }}
 	{{ range .Items }}
 		{{ $favoriteClass := "favorite-no" }}
 		{{ if .Favorite }}
-			{{ $favoriteClass := "favorite-yes" }}
+			{{ $favoriteClass = "favorite-yes" }}
 		{{ end }}
-		<div class="pblock-row"
+		<div class="pblock-item"
 		     data-block-name="{{ .Name }}">
-			<div class="{{ $favoriteClass }}"><span class="op-favorite icon">★</span></div>
+			<div class="{{ $favoriteClass }}">
+				<span class="op-favorite icon"
+				      hx-put="/story/{{ $storyName }}/blockEditor/favorite/{{ .Name }}"
+				      hx-target="closest .pblock-item"
+				      hx-select="[data-block-name='{{ .Name }}']"
+				      hx-swap="outerHTML">★</span>
+			</div>
 			<div class="name">{{ .Name }}</div>
 			<div class="commands">
 				<span class="op-delete icon">⨯</span> 

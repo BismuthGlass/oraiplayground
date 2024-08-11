@@ -61,7 +61,7 @@ func (s *Story) UpdatePreset(name string, data PromptSettings) {
 func (s *Story) EnablePromptBlock(name string) error {
 	block := s.GetPromptBlock(name)
 	if block == nil {
-		return errors.New("Not found")
+		return errors.New("not found")
 	}
 	s.ActivePreset().enableBlock(name)
 	return nil
@@ -70,9 +70,18 @@ func (s *Story) EnablePromptBlock(name string) error {
 func (s *Story) DisablePromptBlock(name string) error {
 	block := s.GetPromptBlock(name)
 	if block == nil {
-		return errors.New("Not found")
+		return errors.New("not found")
 	}
 	s.ActivePreset().disableBlock(name)
+	return nil
+}
+
+func (s *Story) TogglePromptBlockFavorite(name string) error {
+	block := s.GetPromptBlock(name)
+	if block == nil {
+		return errors.New("not found")
+	}
+	s.ActivePreset().toggleBlockFavorite(name)
 	return nil
 }
 

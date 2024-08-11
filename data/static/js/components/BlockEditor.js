@@ -8,24 +8,6 @@ class BlockEditorList {
 		for (let row of root.children) {
 			this.setupRow(row)
 		}
-
-		console.log("Setting up event listeners for the body")
-		document.body.addEventListener("htmx:afterSettle", (e) => {
-			let elem = e.detail.target
-			console.log(elem)
-		})
-		document.body.addEventListener("htmx:afterSwap", (e) => {
-			let elem = e.detail.target
-			console.log(elem)
-		})
-		root.addEventListener("htmx:afterSettle", (e) => {
-			let elem = e.detail.target
-			console.log(elem)
-		})
-		root.addEventListener("htmx:afterSwap", (e) => {
-			let elem = e.detail.target
-			console.log(elem)
-		})
 	}
 
 	setupRow(row) {
@@ -39,13 +21,6 @@ class BlockEditorList {
 		})
 		opDelete.addEventListener("click", () => {
 			this.cbDelete(blockName)
-		})
-		opFavorite.addEventListener("click", () => {
-			console.log(`Favorited ${blockName}`)
-			htmx.ajax("PUT", `/story/${this.storyName}/promptBlock/${blockName}/favorite`, {
-				target: this.root,
-				swap: "outerHTML",
-			})
 		})
 	}
 }

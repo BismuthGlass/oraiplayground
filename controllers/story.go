@@ -6,7 +6,6 @@ import (
 	"crow/oraiplayground/services"
 	"crow/oraiplayground/templates"
 	"net/http"
-	"fmt"
 
 	"github.com/gorilla/mux"
 )
@@ -194,22 +193,8 @@ func putActivatePromptBlock(w http.ResponseWriter, r *http.Request) {
 	//state.TmplEngine.PromptBlockList(w, &ctx)
 }
 
-func favoritePromptBlock(w http.ResponseWriter, r *http.Request) {
-	state := storyRetrieveState(r.Context())
-	vars := mux.Vars(r)
-	storyName := vars["storyName"]
-	blockName := vars["blockName"]
-
-	story := state.StoryDatabaseService.LockForRead(storyName)
-
-	fmt.Printf("Request for %s, block %s\n", storyName, blockName)
-
-	state.TmplEngine.BlockEditorList(w, story)
-}
-
 func InstallStoryController(router *mux.Router) {
 	router.HandleFunc("/", getIndex).Methods("GET")
-	router.HandleFunc("/story/{storyName}/promptBlock/{blockName}/favorite", favoritePromptBlock).Methods("PUT")
 	router.HandleFunc("/settings", postSettings).Methods("POST")
 	router.HandleFunc("/blockEditor", getBlockEditor).Methods("GET")
 	router.HandleFunc("/blockEditor", putBlockEditor).Methods("PUT")

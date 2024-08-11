@@ -8,6 +8,7 @@ import (
 	"context"
 	"net/http"
 	"io"
+	"log"
 )
 
 type BlockEditor struct {
@@ -73,12 +74,24 @@ func postBlockEditorForm(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func putBlockEditorFavorite(w http.ResponseWriter, r *http.Request) {
+	state := blockEditorRetrieveState(r.Context())
+	vars := mux.Vars(r)
+	story := state.StoryDatabaseService.LockForWrite(vars["storyName"])
+	err := story.TogglePromptBlockFavorite(vars["blockName"])
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+	state.TmplEngine.BlockEditorList(w, story)
+}
+
 func InstallBlockEditorController(router *mux.Router) {
-	r := router.PathPrefix("/story/{storyName}/").Subrouter()
-	r.HandleFunc("/blockEditor/list", getBlockEditorList).Methods("GET")
-	r.HandleFunc("/blockEditor/edit/{blockName}", getBlockEditorForm).Methods("GET")
-	r.HandleFunc("/blockEditor/edit/", getBlockEditorForm).Methods("GET")
-	r.HandleFunc("/blockEditor/edit/{blockName}", postBlockEditorForm).Methods("POST")
-	r.HandleFunc("/blockEditor/edit/", postBlockEditorForm).Methods("POST")
+	r := router.PathPrefix("/story/{storyName}/blockEditor/").Subrouter()
+	r.HandleFunc("/list", getBlockEditorList).Methods("GET")
+	r.HandleFunc("/edit/{blockName}", getBlockEditorForm).Methods("GET")
+	r.HandleFunc("/edit/", getBlockEditorForm).Methods("GET")
+	r.HandleFunc("/edit/{blockName}", postBlockEditorForm).Methods("POST")
+	r.HandleFunc("/edit/", postBlockEditorForm).Methods("POST")
+	r.HandleFunc("/favorite/{blockName}", putBlockEditorFavorite).Methods("PUT")
 }
 
