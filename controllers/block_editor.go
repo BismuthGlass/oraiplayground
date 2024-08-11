@@ -58,6 +58,8 @@ func postBlockEditorForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Add("HX-Trigger", "updateEditorBlockList")
+
 	if block != nil {
 		block.Name = input.Name
 		block.Role = input.Role

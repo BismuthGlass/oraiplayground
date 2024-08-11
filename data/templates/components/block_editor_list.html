@@ -1,6 +1,6 @@
 <div class="pblock-editor-table"
-     hx-trigger="evtPromptBlockEditorListUpdate from:body"
-     hx-get="/story/{{ .StoryName }}/promptBlockEditor/list"
+     hx-trigger="updateEditorBlockList from:body"
+     hx-get="/story/{{ .StoryName }}/blockEditor/list"
      hx-swap="outerHTML"
      data-story-name="{{ .StoryName }}">
 	{{ range .Items }}
