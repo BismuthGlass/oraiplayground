@@ -53,9 +53,9 @@ func postBlockEditorForm(w http.ResponseWriter, r *http.Request) {
 
 	existing := story.GetPromptBlock(input.Name)
 	if existing != nil && block != existing {
-		io.WriteString(w, "A block of the same name exists already!")
-		w.Header().Add("HX-Retarget", "this .info")
+		w.Header().Add("HX-Retarget", "previous .info")
 		w.Header().Add("HX-Reswap", "innerHTML")
+		io.WriteString(w, "A block of the same name exists already!")
 		return
 	}
 
