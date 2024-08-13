@@ -15,7 +15,7 @@ textarea {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .v-flex {
@@ -32,6 +32,17 @@ textarea {
 }
 .button-group > p {
     cursor: pointer;
+}
+
+.tab-headers {
+	display: flex;
+	flex-direction: row;
+	color: blue;
+	column-gap: 2em;
+}
+.tab-headers > p {
+	cursor: pointer;
+	margin: 0;
 }
 
 .section {
@@ -59,6 +70,7 @@ textarea {
     border-bottom: 1px solid black;
     display: flex;
     flex-direction: row;
+    align-items: center;
     padding: 10px;
     column-gap: 2em;
     color: blue;
@@ -66,6 +78,15 @@ textarea {
 #navigation p {
     margin: 0;
     cursor: pointer;
+}
+#navigation .icon {
+	font-size: 20px;
+}
+#navigation .right {
+	flex: 1;
+	display: flex;
+	justify-content: right;
+	align-items: center;
 }
 
 #full-window-div > .tab {
@@ -78,6 +99,29 @@ textarea {
 #tab-prompt {
     height: 100%;
     column-gap: 10px;
+}
+
+.popup {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.popup .background {
+	position: absolute;
+	background-color: black;
+	opacity: 0.4;
+	width: 100%;
+	height: 100%;
+}
+.popup .content {
+	z-index: 1;
+	padding: 10px;
+	background-color: lightgray;
 }
 
 .context-pane {
