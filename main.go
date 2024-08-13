@@ -23,9 +23,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	tmplEngine := &templates.Engine{
-		Template: tmpl,
-	}
+	templates.Init(tmpl)
 
 	aiServerService := services.NewAiServer()
 	storyDatabaseService := services.NewStoryDatabase()
@@ -44,7 +42,6 @@ func main() {
 		Handler: rt,
 		BaseContext: func(l net.Listener) context.Context {
 			ctx := context.Background()
-			ctx = context.WithValue(ctx, templates.EngineCtxKey, tmplEngine)
 			ctx = context.WithValue(ctx, services.StoryDatabaseCtxKey, storyDatabaseService)
 			ctx = context.WithValue(ctx, services.StoryCtxKey, storyService)
 			return ctx

@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-type StorySettings struct {
+type storySettings struct {
 	Models            []utils.SelectOption
 	Templates         []utils.SelectOption
 	MaxTokens         int
@@ -21,7 +21,16 @@ type StorySettings struct {
 	LastError         error
 }
 
-func NewStorySettings(story *models.Story, err error) StorySettings {
+type story struct {
+	StoryName string
+	Mode models.StoryMode
+	Settings storySettings
+	PromptBlockList promptBlockList
+	BlockEditorForm blockEditorForm
+	BlockEditorList blockEditorList
+}
+
+func newStorySettings(story *models.Story, err error) storySettings {
 	models := make([]utils.SelectOption, len(config.AvailableModels))
 	_ = copy(models, config.AvailableModels)
 	utils.SetSelection(models, story.ModelSettings.Model)
@@ -30,7 +39,7 @@ func NewStorySettings(story *models.Story, err error) StorySettings {
 	_ = copy(aiTemplates, config.AvailableTemplates)
 	utils.SetSelection(aiTemplates, story.ModelSettings.Template)
 	
-	return StorySettings{
+	return storySettings{
 		Models: models,
 		Templates: aiTemplates,
 		MaxTokens: story.ModelSettings.MaxTokens,
@@ -44,41 +53,29 @@ func NewStorySettings(story *models.Story, err error) StorySettings {
 	}
 }
 
-func (e *Engine) Settings(w io.Writer, ctx *StorySettings) error {
- 	err := e.Template.ExecuteTemplate(w, "components/settings.html", ctx)
+func newStory(s *models.Story) story {
+	return story{
+		StoryName: s.Name,
+		Mode: s.Mode,
+		Settings: newStorySettings(s, nil),
+		PromptBlockList: newPromptBlockList(s),
+		BlockEditorForm: newBlockEditorForm(s.Name, nil, ""),
+		BlockEditorList: newBlockEditorList(s),
+	}
+}
+
+func StorySettings(w io.Writer, story *models.Story, errorInfo error) error {
+	ctx := newStorySettings(story, errorInfo)
+ 	err := engine.Template.ExecuteTemplate(w, "components/settings.html", ctx)
 	if err != nil {
 		log.Println(err)
 	}
 	return err
 }
 
-type StoryLayout struct {
-	Type string
-}
-
-type Story struct {
-	StoryName string
-	Mode models.StoryMode
-	Settings StorySettings
-	PromptBlockList PromptBlockList
-	BlockEditorForm BlockEditorForm
-	BlockEditorList BlockEditorList
-}
-
-func NewStory(story *models.Story) Story {
-	return Story{
-		StoryName: story.Name,
-		Mode: story.Mode,
-		Settings: NewStorySettings(story, nil),
-		PromptBlockList: NewPromptBlockList(story),
-		BlockEditorForm: NewBlockEditorForm(story.Name, nil, ""),
-		BlockEditorList: NewBlockEditorList(story),
-	}
-}
-
-func (e *Engine) StoryPage(w io.Writer, story *models.Story) error {
-	ctx := NewStory(story)
-	err := e.Template.ExecuteTemplate(w, "page_story.html", &ctx)
+func StoryPage(w io.Writer, story *models.Story) error {
+	ctx := newStory(story)
+	err := engine.Template.ExecuteTemplate(w, "page_story.html", &ctx)
 	if err != nil {
 		log.Println(err)
 	}

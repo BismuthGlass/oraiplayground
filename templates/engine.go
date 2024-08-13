@@ -1,14 +1,23 @@
 package templates
 
 import (
-	"crow/oraiplayground/utils"
 	"sync"
 	"text/template"
 )
 
-const EngineCtxKey = utils.CtxKey("TemplateEngine")
+var engine Engine
 
 type Engine struct {
 	Mutex sync.RWMutex
 	Template *template.Template
+}
+
+func Init(template *template.Template) {
+	engine = Engine{
+		Template: template,
+	}
+}
+
+func E() *Engine {
+	return &engine
 }

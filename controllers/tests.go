@@ -9,7 +9,7 @@ import (
 )
 
 func getTestHelloOOB(w http.ResponseWriter, r *http.Request) {
-	templates := r.Context().Value(templates.EngineCtxKey).(*templates.Engine)
+	templates := templates.E()
 
 	err := templates.Template.ExecuteTemplate(w, "tests/hello-oob.html", nil)
 	if err != nil {
@@ -18,7 +18,7 @@ func getTestHelloOOB(w http.ResponseWriter, r *http.Request) {
 }
 
 func getTestList(w http.ResponseWriter, r *http.Request) {
-	templates := r.Context().Value(templates.EngineCtxKey).(*templates.Engine)
+	templates := templates.E()
 
 	err := templates.Template.ExecuteTemplate(w, "tests/list.html", nil)
 	if err != nil {

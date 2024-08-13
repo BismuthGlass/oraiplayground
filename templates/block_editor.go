@@ -8,18 +8,18 @@ import (
 	"log"
 )
 
-type BlockEditorListItem struct {
+type blockEditorListItem struct {
 	Name string
 	Favorite bool
 	Enabled bool
 }
 
-type BlockEditorList struct {
+type blockEditorList struct {
 	StoryName string
-	Items []BlockEditorListItem
+	Items []blockEditorListItem
 }
 
-type BlockEditorForm struct {
+type blockEditorForm struct {
 	StoryName string
 	Name string
 	RoleOptions []utils.SelectOption
@@ -27,27 +27,27 @@ type BlockEditorForm struct {
 	Message string
 }
 
-func NewBlockEditorList(story *models.Story) BlockEditorList {
-	var items []BlockEditorListItem
+func newBlockEditorList(story *models.Story) blockEditorList {
+	var items []blockEditorListItem
 	preset := story.ActivePreset()
 	for _, b := range story.PromptBlocks {
 		favorite := slices.Contains(preset.FavBlocks, b.Name)
 		enabled := slices.Contains(preset.EnabledBlocks, b.Name)
-		items = append(items, BlockEditorListItem{
+		items = append(items, blockEditorListItem{
 			Name: b.Name,
 			Favorite: favorite,
 			Enabled: enabled,
 		})
 	}
-	return BlockEditorList{
+	return blockEditorList{
 		StoryName: story.Name,
 		Items: items,
 	}
 }
 
-func NewBlockEditorForm(storyName string, block *models.PromptBlock, message string) BlockEditorForm {
+func newBlockEditorForm(storyName string, block *models.PromptBlock, message string) blockEditorForm {
 	if block != nil {
-		return BlockEditorForm{
+		return blockEditorForm{
 			StoryName: storyName,
 			Name: block.Name,
 			RoleOptions: block.RoleOptions(),
@@ -55,7 +55,7 @@ func NewBlockEditorForm(storyName string, block *models.PromptBlock, message str
 			Message: message,
 		}
 	} else {
-		return BlockEditorForm{
+		return blockEditorForm{
 			StoryName: storyName,
 			RoleOptions: models.PromptBlockRoleOptions(),
 			Message: message,
@@ -63,18 +63,18 @@ func NewBlockEditorForm(storyName string, block *models.PromptBlock, message str
 	}
 }
 
-func (e *Engine) BlockEditorList(w io.Writer, story *models.Story) error {
-	ctx := NewBlockEditorList(story)
-	err := e.Template.ExecuteTemplate(w, "components/block_editor_list.html", &ctx)
+func BlockEditorList(w io.Writer, story *models.Story) error {
+	ctx := newBlockEditorList(story)
+	err := engine.Template.ExecuteTemplate(w, "components/block_editor_list.html", &ctx)
 	if err != nil {
 		log.Println(err)
 	}
 	return err
 }
 
-func (e *Engine) BlockEditorForm(w io.Writer, storyName string, block *models.PromptBlock, message string) error {
-	ctx := NewBlockEditorForm(storyName, block, message)
-	err := e.Template.ExecuteTemplate(w, "components/block_editor_form.html", &ctx)
+func BlockEditorForm(w io.Writer, storyName string, block *models.PromptBlock, message string) error {
+	ctx := newBlockEditorForm(storyName, block, message)
+	err := engine.Template.ExecuteTemplate(w, "components/block_editor_form.html", &ctx)
 	if err != nil {
 		log.Println(err)
 	}

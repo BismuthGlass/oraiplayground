@@ -11,13 +11,11 @@ import (
 )
 
 type Story struct {
-	TmplEngine *templates.Engine
 	StoryDatabaseService *services.StoryDatabase
 }
 
 func storyRetrieveState(ctx context.Context) *Story {
 	return &Story{
-		TmplEngine: ctx.Value(templates.EngineCtxKey).(*templates.Engine),
 		StoryDatabaseService: ctx.Value(services.StoryDatabaseCtxKey).(*services.StoryDatabase),
 	}
 }
@@ -25,7 +23,7 @@ func storyRetrieveState(ctx context.Context) *Story {
 func getIndex(w http.ResponseWriter, r *http.Request) {
 	state := storyRetrieveState(r.Context())
 	story := state.StoryDatabaseService.LockForRead("default")
-	_ = state.TmplEngine.StoryPage(w, story)
+	_ = templates.StoryPage(w, story)
 }
 
 func postSettings(w http.ResponseWriter, r *http.Request) {
@@ -34,7 +32,7 @@ func postSettings(w http.ResponseWriter, r *http.Request) {
 	//
 	//err := state.StoryService.Story.Settings.ParseFormData(r.PostForm)
 	//ctx := templates.NewStorySettings(&state.StoryService.Story, err)
-	//state.TmplEngine.Settings(w, &ctx)
+	//templates.Settings(w, &ctx)
 }
 
 func getBlockEditor(w http.ResponseWriter, r *http.Request) {
@@ -56,7 +54,7 @@ func getBlockEditor(w http.ResponseWriter, r *http.Request) {
 	//	utils.SetSelection(blockEditor.RoleOptions, string(block.Role))
 	//}
 
-	//_ = state.TmplEngine.PromptBlockEditor(w, &blockEditor)
+	//_ = templates.PromptBlockEditor(w, &blockEditor)
 }
 
 func putBlockEditor(w http.ResponseWriter, r *http.Request) {
@@ -90,7 +88,7 @@ func postPromptBlock(w http.ResponseWriter, r *http.Request) {
 	//_ = state.StoryService.NewPromptBlock(newBlock)
 
 	//ctx := state.StoryService.PromptListComponent.IntoTmplModel()
-	//state.TmplEngine.PromptBlockList(w, &ctx)
+	//templates.PromptBlockList(w, &ctx)
 }
 
 func deletePromptBlock(w http.ResponseWriter, r *http.Request) {
@@ -102,7 +100,7 @@ func deletePromptBlock(w http.ResponseWriter, r *http.Request) {
 //	state.StoryService.DeletePromptBlocks(blockNameList)
 //
 //	ctx := state.StoryService.PromptListComponent.IntoTmplModel()
-//	state.TmplEngine.PromptBlockList(w, &ctx)
+//	templates.PromptBlockList(w, &ctx)
 }
 
 func postAiRequest(w http.ResponseWriter, r *http.Request) {
@@ -188,14 +186,14 @@ func putActivatePromptBlock(w http.ResponseWriter, r *http.Request) {
 	//state.StoryService.ActivatePromptBlock(name, active)
 
 	//ctx := state.StoryService.PromptListComponent.IntoTmplModel()
-	//state.TmplEngine.PromptBlockList(w, &ctx)
+	//templates.PromptBlockList(w, &ctx)
 }
 
 func getPromptInfo(w http.ResponseWriter, r *http.Request) {
 	state := storyRetrieveState(r.Context())
 	vars := mux.Vars(r)
 	story := state.StoryDatabaseService.LockForRead(vars["storyName"])
-	state.TmplEngine.PromptInfo(w, story)
+	templates.PromptInfo(w, story)
 }
 
 func InstallStoryController(router *mux.Router) {

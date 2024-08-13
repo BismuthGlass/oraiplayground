@@ -7,33 +7,34 @@ import (
 	"slices"
 )
 
-type PromptBlockListItem struct {
+type promptBlockListItem struct {
 	Name         string
 	Active       bool
 }
 
-type PromptBlockList struct {
+type promptBlockList struct {
 	StoryName string
-	Items []PromptBlockListItem
+	Items []promptBlockListItem
 }
 
-func NewPromptBlockList(story *models.Story) PromptBlockList {
+func newPromptBlockList(story *models.Story) promptBlockList {
 	preset := story.ActivePreset()
-	items := make([]PromptBlockListItem, 0, len(story.PromptBlocks))
+	items := make([]promptBlockListItem, 0, len(story.PromptBlocks))
 	for _, b := range story.PromptBlocks {
-		items = append(items, PromptBlockListItem{
+		items = append(items, promptBlockListItem{
 			Name: b.Name,
 			Active: slices.Contains(preset.EnabledBlocks, b.Name),
 		})
 	}
-	return PromptBlockList{
+	return promptBlockList{
 		StoryName: story.Name,
 		Items: items,
 	}
 }
 
-func (e *Engine) PromptBlockList(w io.Writer, ctx *PromptBlockList) error {
-	err := e.Template.ExecuteTemplate(w, "components/prompt_block_list.html", ctx)
+func PromptBlockList(w io.Writer, story *models.Story) error {
+	ctx := newPromptBlockList(story)
+	err := engine.Template.ExecuteTemplate(w, "components/prompt_block_list.html", ctx)
 	if err != nil {
 		log.Println(err)
 	}
