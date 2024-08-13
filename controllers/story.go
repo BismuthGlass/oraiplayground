@@ -12,14 +12,12 @@ import (
 
 type Story struct {
 	TmplEngine *templates.Engine
-	StoryService *services.Story
 	StoryDatabaseService *services.StoryDatabase
 }
 
 func storyRetrieveState(ctx context.Context) *Story {
 	return &Story{
 		TmplEngine: ctx.Value(templates.EngineCtxKey).(*templates.Engine),
-		StoryService: ctx.Value(services.StoryCtxKey).(*services.Story),
 		StoryDatabaseService: ctx.Value(services.StoryDatabaseCtxKey).(*services.StoryDatabase),
 	}
 }
@@ -193,16 +191,15 @@ func putActivatePromptBlock(w http.ResponseWriter, r *http.Request) {
 	//state.TmplEngine.PromptBlockList(w, &ctx)
 }
 
+func getPromptInfo(w http.ResponseWriter, r *http.Request) {
+	state := storyRetrieveState(r.Context())
+	vars := mux.Vars(r)
+	story := state.StoryDatabaseService.LockForRead(vars["storyName"])
+	state.TmplEngine.PromptInfo(w, story)
+}
+
 func InstallStoryController(router *mux.Router) {
 	router.HandleFunc("/", getIndex).Methods("GET")
-	router.HandleFunc("/settings", postSettings).Methods("POST")
-	router.HandleFunc("/blockEditor", getBlockEditor).Methods("GET")
-	router.HandleFunc("/blockEditor", putBlockEditor).Methods("PUT")
-	router.HandleFunc("/promptBlock", postPromptBlock).Methods("POST")
-	router.HandleFunc("/promptBlock/delete", deletePromptBlock).Methods("POST")
-	router.HandleFunc("/aiRequest", postAiRequest).Methods("POST")
-	router.HandleFunc("/aiRequest", getAiRequest).Methods("GET")
-	router.HandleFunc("/aiRequest", deleteAiRequest).Methods("DELETE")
-	router.HandleFunc("/promptPreview", getPromptPreview).Methods("GET")
-	router.HandleFunc("/activatePromptBlock", putActivatePromptBlock).Methods("PUT")
+	r := router.PathPrefix("/story/{storyName}/").Subrouter()
+	r.HandleFunc("/promptInfo", getPromptInfo).Methods("GET")
 }
