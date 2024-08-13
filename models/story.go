@@ -16,10 +16,17 @@ type Story struct {
 	Mode StoryMode
 	ModelSettings ModelSettings
 
+	LastPrompt string
+	LastPromptTokens int
+
 	ActivePromptPreset string
 	PromptPresets map[string]*PromptSettings
 	PromptBlocks []PromptBlock
 	Variables []StoryVariable
+}
+
+func (s *Story) compileBlocks() []PromptBlock {
+	return s.PromptBlocks
 }
 
 func (s *Story) GetPromptBlock(name string) *PromptBlock {
@@ -29,6 +36,11 @@ func (s *Story) GetPromptBlock(name string) *PromptBlock {
 		}
 	}
 	return nil
+}
+
+func (s *Story) GenPrompt() string {
+	blocks := s.compileBlocks()
+	return BlocksIntoPrompt(blocks, s.ModelSettings.Template)
 }
 
 func NewStory(name string, description string, storyMode StoryMode, defaultModelSettings ModelSettings) Story {

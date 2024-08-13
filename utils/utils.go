@@ -27,3 +27,19 @@ func ParseAndValidateInt(fieldName string, value string, min int64, max int64) (
 	return v, nil
 }
 
+func WordCount(s string) int {
+	count := 0
+	inWord := false
+	for _, c := range s {
+		if c == ' ' || c == '\n' || c == '\t' {
+			if inWord {
+				count += 1
+				inWord = false
+			}
+		} else {
+			inWord = true
+		}
+	}
+	return count
+}
+
