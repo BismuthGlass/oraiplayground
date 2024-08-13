@@ -5,12 +5,15 @@
         <link rel="stylesheet" href="/static/css/story-page.css">
         <script type="module" src="/static/js/ui.js"></script>
     </head>
-    <body>
+    <body data-story-name="{{ .StoryName }}">
         <div id="full-window-div">
             <div id="navigation">
                 <p data-tab-name="story">Story</p>
 		<p data-tab-name="prompt">Prompt</p>
                 <p data-tab-name="settings">Settings</p>
+		<div class="right">
+			<p class="icon" id="open-prompt-info">👁</p>
+		</div>
             </div>
             <div class="tab tab-story h-flex" data-tab-name="story">
                 {{ template "tab_story.html" . }}
@@ -22,5 +25,9 @@
                 {{ template "components/settings.html" .Settings }}
             </div>
         </div>
+	<div class="popup hidden" id="prompt-info">
+		<div class="background"></div>
+		<div class="content v-flex"></div>
+	</div>
     </body>
 </html>

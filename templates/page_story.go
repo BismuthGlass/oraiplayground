@@ -57,6 +57,7 @@ type StoryLayout struct {
 }
 
 type Story struct {
+	StoryName string
 	Mode models.StoryMode
 	Settings StorySettings
 	PromptBlockList PromptBlockList
@@ -66,6 +67,7 @@ type Story struct {
 
 func NewStory(story *models.Story) Story {
 	return Story{
+		StoryName: story.Name,
 		Mode: story.Mode,
 		Settings: NewStorySettings(story, nil),
 		PromptBlockList: NewPromptBlockList(story),

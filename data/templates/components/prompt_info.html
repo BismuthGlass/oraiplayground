@@ -1,0 +1,15 @@
+<div class="prompt-info-content content v-flex">
+	<nav class="tab-headers">
+		<p data-tab-name="next-prompt">Current prompt</p>
+		<p data-tab-name="last-prompt">Last prompt</p>
+	</nav>
+	<div class="tab v-flex" data-tab-name="next-prompt">
+		<p>Aprox token count: {{ .NextPromptTokens }}</p>
+		<textarea readonly>{{ .NextPrompt }}</textarea>
+	</div>
+	<div class="tab v-flex" data-tab-name="last-prompt">
+		<p>Aprox token count: {{ .LastPromptTokens }}</p>
+		<textarea readonly>{{ .LastPrompt }}</textarea>
+	</div>
+</div>
+

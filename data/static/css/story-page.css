@@ -27,3 +27,13 @@
 .pblock-editor-table .favorite-yes {
 	color: orange;
 }
+
+#prompt-info > .content {
+	width: 80%;
+	max-width: 500px;
+	height: 80%;
+}
+#prompt-info .tab,
+#prompt-info textarea {
+	flex: 1;
+}
