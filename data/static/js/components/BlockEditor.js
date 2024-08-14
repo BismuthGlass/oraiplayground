@@ -21,9 +21,6 @@ class BlockEditorList {
 		opEdit.addEventListener("click", () => {
 			this.cbEdit(blockName)
 		})
-		opDelete.addEventListener("click", () => {
-			this.cbDelete(blockName)
-		})
 	}
 }
 
@@ -73,6 +70,14 @@ export class BlockEditorMaster {
 		window.blockEditor = {}
 		window.blockEditor.setupList = (e) => {
 			this.list = new BlockEditorList(e, "default", this.deleteBlock.bind(this), this.editBlock.bind(this))
+		}
+		window.blockEditor.confirmDelete = (elt, blockName) => {
+			if (this.editor.blockName == blockName) {
+				alert("Block is open for editing")
+			}
+			if (confirm(`Delete ${blockName}?`)) {
+				htmx.trigger(elt, 'confirmed')
+			}
 		}
 
 		let list = document.getElementsByClassName("pblock-editor-table")[0]

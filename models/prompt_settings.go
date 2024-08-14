@@ -36,3 +36,11 @@ func (s *PromptSettings) toggleBlockFavorite(name string) {
 		s.FavBlocks = append(s.FavBlocks, name)
 	}
 }
+
+// Removes all mentions of `name` from both the favorites and enabled lists.
+// Useful when deleting blocks.
+func (s *PromptSettings) removeBlock(name string) {
+	predicate := func(n string) bool { return n == name }
+	s.FavBlocks = slices.DeleteFunc(s.FavBlocks, predicate)
+	s.EnabledBlocks = slices.DeleteFunc(s.EnabledBlocks, predicate)
+}

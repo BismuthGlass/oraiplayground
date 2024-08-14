@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"slices"
 )
 
 type StoryMode string
@@ -107,31 +108,70 @@ func (s *Story) TogglePromptBlock(name string) error {
 }
 
 func (s *Story) UpdatePromptBlock(name string, blockData PromptBlock) error {
-	// TODO
+	block := s.GetPromptBlock(name)
+	if block == nil {
+		return errors.New("not found")
+	}
+	existingBlock := s.GetPromptBlock(blockData.Name)
+	if existingBlock != nil && existingBlock != block {
+		return errors.New("exists")
+	}
+	block.Name = blockData.Name
+	block.Role = blockData.Role
+	block.Text = blockData.Text
+	block.Compiled = blockData.Compiled
 	return nil
 }
 
 func (s *Story) AddPromptBlock(block PromptBlock) error {
 	existingBlock := s.GetPromptBlock(block.Name)
 	if existingBlock != nil {
-		return errors.New("Exists")
+		return errors.New("exists")
 	}
 	s.PromptBlocks = append(s.PromptBlocks, block)
 	return nil
 }
 
 func (s *Story) DeletePromptBlock(name string) {
-	// TODO
+	s.PromptBlocks = slices.DeleteFunc(s.PromptBlocks, func(b PromptBlock) bool {
+		return b.Name == name
+	})
+	for _, preset := range s.PromptPresets {
+		preset.removeBlock(name)
+	}
 }
 
 // Moves `name` under `ref`
 func (s *Story) MovePromptBlock(name string, ref string) error {
-	// TODO
+	if name == ref {
+		return nil
+	}
+	currentPos := -1
+	destinationPos := -1
+	for i, b := range s.PromptBlocks {
+		if b.Name == name {
+			currentPos = i
+		} else if b.Name == ref {
+			destinationPos = i + 1
+		}
+	}
+	movedBlock := s.PromptBlocks[currentPos]
+	if currentPos == -1 || destinationPos == -1 {
+		return errors.New("not found")
+	}
+	s.PromptBlocks = slices.Delete(s.PromptBlocks, currentPos, currentPos + 1)
+	s.PromptBlocks = slices.Insert(s.PromptBlocks, destinationPos, movedBlock)
 	return nil
 }
 
 func (s *Story) GetEnabledBlocks() []PromptBlock {
-	//preset := s.ActivePreset()
-	return nil
+	preset := s.ActivePreset()
+	list := make([]PromptBlock, 0, len(preset.FavBlocks))
+	for _, b := range s.PromptBlocks {
+		if slices.Contains(preset.EnabledBlocks, b.Name) {
+			list = append(list, b)
+		}
+	}
+	return list
 }
 

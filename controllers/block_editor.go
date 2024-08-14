@@ -41,7 +41,6 @@ func postBlockEditorForm(w http.ResponseWriter, r *http.Request) {
 	state := blockEditorRetrieveState(r.Context())
 	vars := mux.Vars(r)
 	story := state.StoryDatabaseService.LockForWrite(vars["storyName"])
-	block := story.GetPromptBlock(vars["blockName"])
 
 	input := models.PromptBlock{
 		Name: r.PostFormValue("name"),
@@ -50,8 +49,8 @@ func postBlockEditorForm(w http.ResponseWriter, r *http.Request) {
 		Compiled: r.PostFormValue("compiled") == "on",
 	}
 
-	existing := story.GetPromptBlock(input.Name)
-	if existing != nil && block != existing {
+	err := story.UpdatePromptBlock(vars["blockName"], input)
+	if err != nil && err.Error() == "exists" {
 		w.Header().Add("HX-Retarget", "previous .info")
 		w.Header().Add("HX-Reswap", "innerHTML")
 		io.WriteString(w, "A block of the same name exists already!")
@@ -60,18 +59,24 @@ func postBlockEditorForm(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Add("HX-Trigger", "updateEditorBlockList")
 
-	if block != nil {
-		block.Name = input.Name
-		block.Role = input.Role
-		block.Text = input.Text
-		block.Compiled = input.Compiled
+	if err == nil {
+		block := story.GetPromptBlock(input.Name)
 		templates.BlockEditorForm(w, story.Name, block, "Block updated!")
 	} else {
-		_ = story.AddPromptBlock(input)
-		block = story.GetPromptBlock(input.Name)
+		err := story.AddPromptBlock(input)
+		if err != nil {
+			log.Fatalf("Unexpected error %s\n", err.Error())
+		}
+		block := story.GetPromptBlock(input.Name)
 		templates.BlockEditorForm(w, story.Name, block, "New block created!")
 	}
+}
 
+func deleteBlockEditor(w http.ResponseWriter, r *http.Request) {
+	state := blockEditorRetrieveState(r.Context())
+	vars := mux.Vars(r)
+	story := state.StoryDatabaseService.LockForWrite(vars["storyName"])
+	story.DeletePromptBlock(vars["blockName"])
 }
 
 func putBlockEditorFavorite(w http.ResponseWriter, r *http.Request) {
@@ -103,6 +108,8 @@ func InstallBlockEditorController(router *mux.Router) {
 	r.HandleFunc("/edit/", getBlockEditorForm).Methods("GET")
 	r.HandleFunc("/edit/{blockName}", postBlockEditorForm).Methods("POST")
 	r.HandleFunc("/edit/", postBlockEditorForm).Methods("POST")
+	r.HandleFunc("/edit/{blockName}", deleteBlockEditor).Methods("DELETE")
+	//r.HandleFunc("/move/{blockName}/{destinationBlock}", putBlockEditorMove).Methods("POST")
 	r.HandleFunc("/favorite/{blockName}", putBlockEditorFavorite).Methods("PUT")
 	r.HandleFunc("/enable/{blockName}", putBlockEditorEnable).Methods("PUT")
 }

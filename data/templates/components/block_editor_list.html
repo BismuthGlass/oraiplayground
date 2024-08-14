@@ -28,7 +28,12 @@
 			     hx-select="[data-block-name='{{ .Name }}']"
 			     hx-swap="outerHTML">★</div>
 			<div class="name">{{ .Name }}</div>
-			<div class="op-delete icon">⨯</div> 
+			<div class="op-delete icon"
+			     hx-delete="/story/{{ $storyName }}/blockEditor/edit/{{ .Name }}"
+			     hx-target="closest .pblock-item"
+			     hx-swap="outerHTML"
+			     hx-trigger="confirmed"
+			     onclick="blockEditor.confirmDelete(this, '{{ .Name }}')">⨯</div> 
 			<div class="op-edit icon">✎</div>
 		</div>
 	{{ end }}
