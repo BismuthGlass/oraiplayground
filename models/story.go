@@ -45,9 +45,9 @@ func (s *Story) GenPrompt() string {
 
 func NewStory(name string, description string, storyMode StoryMode, defaultModelSettings ModelSettings) Story {
 	blocks := []PromptBlock {
-		{ Name: "block_1", Text: "" },
-		{ Name: "block_2", Text: "" },
-		{ Name: "block_3", Text: "" },
+		{ Name: "block_1", Text: "", Role: PromptRoleUser },
+		{ Name: "block_2", Text: "", Role: PromptRoleUser },
+		{ Name: "block_3", Text: "", Role: PromptRoleUser },
 	}
 	promptPresets := make(map[string]*PromptSettings)
 	promptPresets["default"] = &PromptSettings{}
