@@ -47,6 +47,7 @@ func postBlockEditorForm(w http.ResponseWriter, r *http.Request) {
 		Name: r.PostFormValue("name"),
 		Role: models.PromptRole(r.PostFormValue("role")),
 		Text: r.PostFormValue("text"),
+		Compiled: r.PostFormValue("compiled") == "on",
 	}
 
 	existing := story.GetPromptBlock(input.Name)
@@ -63,6 +64,7 @@ func postBlockEditorForm(w http.ResponseWriter, r *http.Request) {
 		block.Name = input.Name
 		block.Role = input.Role
 		block.Text = input.Text
+		block.Compiled = input.Compiled
 		templates.BlockEditorForm(w, story.Name, block, "Block updated!")
 	} else {
 		_ = story.AddPromptBlock(input)

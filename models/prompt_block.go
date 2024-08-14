@@ -20,6 +20,7 @@ type PromptBlock struct {
 	Name     string         `json:"name"`
 	Role     PromptRole     `json:"role"`
 	Text     string         `json:"text"`
+	Compiled bool           `json:"compiled"`
 }
 
 func (pb *PromptBlock) RoleOptions() []utils.SelectOption {

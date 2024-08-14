@@ -25,6 +25,7 @@ type blockEditorForm struct {
 	RoleOptions []utils.SelectOption
 	Text string
 	Message string
+	Compiled bool
 }
 
 func newBlockEditorList(story *models.Story) blockEditorList {
@@ -52,6 +53,7 @@ func newBlockEditorForm(storyName string, block *models.PromptBlock, message str
 			Name: block.Name,
 			RoleOptions: block.RoleOptions(),
 			Text: block.Text,
+			Compiled: block.Compiled,
 			Message: message,
 		}
 	} else {

@@ -3,7 +3,7 @@
       hx-target="this"
       hx-swap="outerHTML">
 	<div class="h-flex">
-		<input type="text" name="name" value="{{ .Name }}">
+		<input type="text" name="name" placeholder="Name" value="{{ .Name }}">
 		<div class="align-right">
 			<select name="role">
 				{{ range .RoleOptions }}
@@ -16,8 +16,11 @@
 		</div>
 	</div>
 	<div class="v-flex info-block" data-tab="block">
-		<p>Text</p>
-		<textarea name="text">{{ .Text }}</textarea>
+		<div>
+			<label>Compiled: </label>
+			<input type="checkbox" name="compiled" {{ if .Compiled }}checked{{ end }}>
+		</div>
+		<textarea placeholder="Prompt..." name="text">{{ .Text }}</textarea>
 	</div>
 
 	<div class="info">{{ .Message }}</div>

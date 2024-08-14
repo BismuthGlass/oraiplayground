@@ -40,10 +40,12 @@ class BlockEditorForm {
 		let roleSelect = root.elements["role"]
 		let text = root.elements["text"]
 		let name = root.elements["name"]
+		let compiled = root.elements["compiled"]
 
 		roleSelect.addEventListener("change", this.whenEdited.bind(this))
-		text.addEventListener("keypress", this.whenEdited.bind(this))
-		name.addEventListener("keypress", this.whenEdited.bind(this))
+		text.addEventListener("keydown", this.whenEdited.bind(this))
+		name.addEventListener("keydown", this.whenEdited.bind(this))
+		compiled.addEventListener("change", this.whenEdited.bind(this))
 	}
 
 	whenEdited() {
