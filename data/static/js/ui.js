@@ -45,6 +45,14 @@ function setup() {
 	window.setupTabs = setupTabs
 
 	console.log("setup done!")
+
+	if (false) {
+		htmx.logger = function(elt, event, data) {
+			if(console) {
+				console.log("INFO:", event, elt, data);
+			}
+		}
+	}
 }
 
 document.addEventListener("DOMContentLoaded", setup)

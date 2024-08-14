@@ -8,6 +8,8 @@ class BlockEditorList {
 		for (let row of root.children) {
 			this.setupRow(row)
 		}
+
+		window.blockEditor.setupRow = this.setupRow.bind(this)
 	}
 
 	setupRow(row) {
@@ -31,7 +33,6 @@ class BlockEditorForm {
 		this.storyName = storyName
 		this.blockName = root.dataset.blockName
 		this.edited = false
-		console.log(this.storyName)
 
 		this.saveBt = root.getElementsByClassName("save-bt")[0]
 		this.discardBt = root.getElementsByClassName("discard-bt")[0]
@@ -49,7 +50,6 @@ class BlockEditorForm {
 	}
 
 	whenEdited() {
-		console.log("Edited!")
 		this.edited = true
 		this.saveBt.disabled = false
 		this.discardBt.disabled = false
@@ -70,6 +70,11 @@ class BlockEditorForm {
 
 export class BlockEditorMaster {
 	constructor() {
+		window.blockEditor = {}
+		window.blockEditor.setupList = (e) => {
+			this.list = new BlockEditorList(e, "default", this.deleteBlock.bind(this), this.editBlock.bind(this))
+		}
+
 		let list = document.getElementsByClassName("pblock-editor-table")[0]
 		let editor = document.getElementsByClassName("pblock-editor")[0]
 		this.list = new BlockEditorList(list, "default", this.deleteBlock.bind(this), this.editBlock.bind(this))
@@ -77,31 +82,13 @@ export class BlockEditorMaster {
 
 		document.body.addEventListener("htmx:load", (e) => {
 			let elt = e.detail.elt
-			if (elt.classList.contains("pblock-editor-table")) {
-				this.list = new BlockEditorList(
-					elt, 
-					"default",				
-					this.deleteBlock.bind(this),
-					this.editBlock.bind(this),
-				)
-			} else if (elt.classList.contains("pblock-editor")) {
-				console.log("Setting up form")
+			if (elt.classList.contains("pblock-editor")) {
 				this.editor = new BlockEditorForm(elt, "default")
 			}
 		})
-
-		document.body.addEventListener("evtRefreshBlockList", (e) => {
-			if (e.details.targets.includes("pblock-editor-table")) {
-				htmx.ajax("GET", "/story/default/promptBlockEditor/list", {
-					target: this.list.root,
-					swap: "outerHTML",
-				})
-			}
-		});
 	}
 
 	deleteBlock(blockName) {
-		console.log(`Delete called on ${blockName}`)
 		if (this.editor.blockName == blockName) {
 			alert("Block is open for editing")
 			return
@@ -113,7 +100,6 @@ export class BlockEditorMaster {
 	}
 
 	editBlock(blockName) {
-		console.log(`Edit called on ${blockName}`)
 		if (this.editor.isEdited()) {
 			if (confirm("Discard changes?")) {
 				this.editor.edit(blockName)
@@ -124,62 +110,3 @@ export class BlockEditorMaster {
 	}
 }
 
-export class PromptBlockEditor {
-    constructor(root) {
-        this.root = root
-        this.empty = !root.dataset.blockName || root.dataset.blockName === ""
-
-        this.root.dataset.edited = "false"
-
-        if (!this.empty) {
-            this.saveBt = root.getElementsByClassName("save-bt")[0]
-            this.discardBt = root.getElementsByClassName("discard-bt")[0]
-            this.closeBt = root.getElementsByClassName("close-bt")[0]
-            this.modifiedIndicator = root.getElementsByClassName("modified-indicator")[0]
-
-            root.elements["section"].addEventListener("change", this.changeHandler.bind(this))
-            if (root.elements["prefix"])
-                root.elements["prefix"].addEventListener("input", this.changeHandler.bind(this))
-            if (root.elements["suffix"])
-                root.elements["suffix"].addEventListener("input", this.changeHandler.bind(this))
-            if (root.elements["text"])
-                root.elements["text"].addEventListener("input", this.changeHandler.bind(this))
-
-            this.saveBt.addEventListener("click", this.saveHandler.bind(this))
-            this.discardBt.addEventListener("htmx:confirm", this.confirmHandle.bind(this))
-        }
-    }
-
-    changeHandler(e) {
-        this.saveBt.disabled = false
-        this.discardBt.disabled = false
-        this.closeBt.disabled = true
-        this.root.dataset.edited = "true"
-        this.modifiedIndicator.innerHTML = "*"
-    }
-
-    saveHandler(e) {
-        this.saveBt.disabled = true
-        this.discardBt.disabled = true
-        this.closeBt.disabled = false
-        this.modifiedIndicator.innerHTML = ""
-        this.root.dataset.edited = "false"
-        htmx.trigger(this.root, `${this.root.id}-save`)
-    }
-
-    confirmHandle(e) {
-        e.preventDefault()
-        if (!this.isModified) {
-            e.detail.issueRequest(true)
-        } else {
-            let ok = confirm(e.detail.question)
-            if (ok) {
-                e.detail.issueRequest(true)
-            }
-        }
-    }
-
-    isModified() {
-        return this.modifiedIndicator.innerHTML == "*"
-    }
-}

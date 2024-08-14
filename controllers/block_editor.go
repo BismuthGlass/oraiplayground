@@ -82,7 +82,6 @@ func putBlockEditorFavorite(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
-	w.Header().Add("HX-Trigger", "updateEditorBlockList")
 	templates.BlockEditorList(w, story)
 }
 
@@ -94,7 +93,6 @@ func putBlockEditorEnable(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
-	w.Header().Add("HX-Trigger", "updateEditorBlockList")
 	templates.BlockEditorList(w, story)
 }
 

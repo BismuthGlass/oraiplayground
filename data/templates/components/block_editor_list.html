@@ -2,6 +2,7 @@
      hx-trigger="updateEditorBlockList from:body"
      hx-get="/story/{{ .StoryName }}/blockEditor/list"
      hx-swap="outerHTML"
+     hx-on::after-settle="blockEditor.setupList(this)"
      data-story-name="{{ .StoryName }}">
 	{{ $storyName := .StoryName }}
 	{{ range .Items }}
@@ -14,7 +15,8 @@
 			{{ $enabledClass = "enabled-yes" }}
 		{{ end }}
 		<div class="pblock-item"
-		     data-block-name="{{ .Name }}">
+		     data-block-name="{{ .Name }}"
+		     hx-on::after-settle="event.stopPropagation(); blockEditor.setupRow(this)">
 			<div class="{{ $enabledClass }} op-enabled icon"
 			     hx-put="/story/{{ $storyName }}/blockEditor/enable/{{ .Name }}"
 			     hx-target="closest .pblock-item"
@@ -31,3 +33,4 @@
 		</div>
 	{{ end }}
 </div>
+
