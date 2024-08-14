@@ -1,8 +1,7 @@
 import { PromptBlockList } from "./components/PromptBlockList.js"
-import { TabController } from "./components/TabController.js"
+import { TabController, setupTabs } from "./components/TabController.js"
 import { EditorLayout } from "./components/EditorLayout.js"
 import { BlockEditorMaster } from "./components/BlockEditor.js"
-import { setupPromptInfoPopup } from "./components/PromptInfo.js"
 
 class StoryMasterController {
 	constructor(root) {
@@ -43,7 +42,7 @@ function setup() {
 
 	new BlockEditorMaster()
 
-	setupPromptInfoPopup()
+	window.setupTabs = setupTabs
 
 	console.log("setup done!")
 }

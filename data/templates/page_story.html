@@ -12,7 +12,11 @@
 		<p data-tab-name="prompt">Prompt</p>
                 <p data-tab-name="settings">Settings</p>
 		<div class="right">
-			<p class="icon" id="open-prompt-info">👁</p>
+			<p class="icon" 
+			   id="open-prompt-info"
+			   hx-get="/story/{{ .StoryName }}/promptInfo"
+			   hx-target="#prompt-info .content"
+			   hx-swap="outerHTML">👁</p>
 		</div>
             </div>
             <div class="tab tab-story h-flex" data-tab-name="story">
@@ -25,8 +29,11 @@
                 {{ template "components/settings.html" .Settings }}
             </div>
         </div>
-	<div class="popup hidden" id="prompt-info">
-		<div class="background"></div>
+	<div class="popup" 
+	     id="prompt-info"
+	     style="display: none">
+		<div class="background"
+		     onclick="document.getElementById('prompt-info').style.display = 'none'"></div>
 		<div class="content v-flex"></div>
 	</div>
     </body>

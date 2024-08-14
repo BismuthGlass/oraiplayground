@@ -1,4 +1,5 @@
-<div class="prompt-info-content content v-flex">
+<div class="prompt-info-content content v-flex"
+     hx-on::after-settle="document.getElementById('prompt-info').style.display = ''; setupTabs(this, 'next-prompt')">
 	<nav class="tab-headers">
 		<p data-tab-name="next-prompt">Current prompt</p>
 		<p data-tab-name="last-prompt">Last prompt</p>
