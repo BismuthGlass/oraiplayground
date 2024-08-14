@@ -9,20 +9,25 @@
 		{{ if .Favorite }}
 			{{ $favoriteClass = "favorite-yes" }}
 		{{ end }}
+		{{ $enabledClass := "enabled-no" }}
+		{{ if .Enabled }}
+			{{ $enabledClass = "enabled-yes" }}
+		{{ end }}
 		<div class="pblock-item"
 		     data-block-name="{{ .Name }}">
-			<div class="{{ $favoriteClass }}">
-				<span class="op-favorite icon"
-				      hx-put="/story/{{ $storyName }}/blockEditor/favorite/{{ .Name }}"
-				      hx-target="closest .pblock-item"
-				      hx-select="[data-block-name='{{ .Name }}']"
-				      hx-swap="outerHTML">★</span>
-			</div>
+			<div class="{{ $enabledClass }} op-enabled icon"
+			     hx-put="/story/{{ $storyName }}/blockEditor/enable/{{ .Name }}"
+			     hx-target="closest .pblock-item"
+			     hx-select="[data-block-name='{{ .Name }}']"
+			     hx-swap="outerHTML">✓</div>
+			<div class="{{ $favoriteClass }} op-favorite icon"
+			     hx-put="/story/{{ $storyName }}/blockEditor/favorite/{{ .Name }}"
+			     hx-target="closest .pblock-item"
+			     hx-select="[data-block-name='{{ .Name }}']"
+			     hx-swap="outerHTML">★</div>
 			<div class="name">{{ .Name }}</div>
-			<div class="commands">
-				<span class="op-delete icon">⨯</span> 
-				<span class="op-edit icon">✎</span>
-			</div>
+			<div class="op-delete icon">⨯</div> 
+			<div class="op-edit icon">✎</div>
 		</div>
 	{{ end }}
 </div>

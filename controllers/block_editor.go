@@ -80,6 +80,19 @@ func putBlockEditorFavorite(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
+	w.Header().Add("HX-Trigger", "updateEditorBlockList")
+	templates.BlockEditorList(w, story)
+}
+
+func putBlockEditorEnable(w http.ResponseWriter, r *http.Request) {
+	state := blockEditorRetrieveState(r.Context())
+	vars := mux.Vars(r)
+	story := state.StoryDatabaseService.LockForWrite(vars["storyName"])
+	err := story.TogglePromptBlock(vars["blockName"])
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+	w.Header().Add("HX-Trigger", "updateEditorBlockList")
 	templates.BlockEditorList(w, story)
 }
 
@@ -91,5 +104,6 @@ func InstallBlockEditorController(router *mux.Router) {
 	r.HandleFunc("/edit/{blockName}", postBlockEditorForm).Methods("POST")
 	r.HandleFunc("/edit/", postBlockEditorForm).Methods("POST")
 	r.HandleFunc("/favorite/{blockName}", putBlockEditorFavorite).Methods("PUT")
+	r.HandleFunc("/enable/{blockName}", putBlockEditorEnable).Methods("PUT")
 }
 

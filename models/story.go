@@ -97,6 +97,15 @@ func (s *Story) TogglePromptBlockFavorite(name string) error {
 	return nil
 }
 
+func (s *Story) TogglePromptBlock(name string) error {
+	block := s.GetPromptBlock(name)
+	if block == nil {
+		return errors.New("not found")
+	}
+	s.ActivePreset().toggleBlock(name)
+	return nil
+}
+
 func (s *Story) UpdatePromptBlock(name string, blockData PromptBlock) error {
 	// TODO
 	return nil

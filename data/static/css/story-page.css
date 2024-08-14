@@ -10,6 +10,8 @@
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	column-gap: 3px;
+	padding: 3px 5px;
 }
 .pblock-editor-table .pblock-row > div {
 	padding: 0 5px;	
@@ -21,11 +23,15 @@
 	font-size: 20px;
 	cursor: pointer;
 }
-.pblock-editor-table .favorite-no {
+.pblock-editor-table .favorite-no, 
+.pblock-editor-table .enabled-no {
 	opacity: 0.5;
 }
 .pblock-editor-table .favorite-yes {
 	color: orange;
+}
+.pblock-editor-table .enabled-yes {
+	color: green;
 }
 
 #prompt-info > .content {
