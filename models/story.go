@@ -143,24 +143,22 @@ func (s *Story) DeletePromptBlock(name string) {
 
 // Moves `name` under `ref`
 func (s *Story) MovePromptBlock(name string, ref string) error {
+	blockPtr := s.GetPromptBlock(name)
+	if blockPtr == nil || s.GetPromptBlock(ref) == nil {
+		return errors.New("not found")
+	}
 	if name == ref {
 		return nil
 	}
-	currentPos := -1
-	destinationPos := -1
+	block := *blockPtr
+
+	s.PromptBlocks = slices.DeleteFunc(s.PromptBlocks, func(b PromptBlock) bool { return b.Name == name })
 	for i, b := range s.PromptBlocks {
-		if b.Name == name {
-			currentPos = i
-		} else if b.Name == ref {
-			destinationPos = i + 1
+		if b.Name == ref {
+			s.PromptBlocks = slices.Insert(s.PromptBlocks, i + 1, block)
+			return nil
 		}
 	}
-	movedBlock := s.PromptBlocks[currentPos]
-	if currentPos == -1 || destinationPos == -1 {
-		return errors.New("not found")
-	}
-	s.PromptBlocks = slices.Delete(s.PromptBlocks, currentPos, currentPos + 1)
-	s.PromptBlocks = slices.Insert(s.PromptBlocks, destinationPos, movedBlock)
 	return nil
 }
 

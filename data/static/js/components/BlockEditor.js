@@ -21,6 +21,26 @@ class BlockEditorList {
 		opEdit.addEventListener("click", () => {
 			this.cbEdit(blockName)
 		})
+
+		row.addEventListener("dragstart", (e) => { this.dragged = e.target })
+		row.addEventListener("dragover", function(e) { e.preventDefault() })
+		row.addEventListener("drop", this.dropHandler.bind(this))
+	}
+
+	dropHandler(e) {
+		e.preventDefault()
+
+		let dragTarget = e.currentTarget
+		if (this.dragged == dragTarget) {
+			return
+		}
+
+		let draggedBlockName = this.dragged.dataset.blockName
+		let targetBlockName = dragTarget.dataset.blockName
+		htmx.ajax("put", `/story/${this.storyName}/blockEditor/move/${draggedBlockName}/${targetBlockName}`, {
+			target: this.root,
+			swap: "outerHTML",
+		})
 	}
 }
 

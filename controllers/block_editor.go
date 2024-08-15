@@ -101,6 +101,17 @@ func putBlockEditorEnable(w http.ResponseWriter, r *http.Request) {
 	templates.BlockEditorList(w, story)
 }
 
+func putBlockEditorMove(w http.ResponseWriter, r *http.Request) {
+	state := blockEditorRetrieveState(r.Context())
+	vars := mux.Vars(r)
+	story := state.StoryDatabaseService.LockForWrite(vars["storyName"])
+	err := story.MovePromptBlock(vars["blockName"], vars["destinationBlock"])
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+	templates.BlockEditorList(w, story)
+}
+
 func InstallBlockEditorController(router *mux.Router) {
 	r := router.PathPrefix("/story/{storyName}/blockEditor/").Subrouter()
 	r.HandleFunc("/list", getBlockEditorList).Methods("GET")
@@ -109,7 +120,7 @@ func InstallBlockEditorController(router *mux.Router) {
 	r.HandleFunc("/edit/{blockName}", postBlockEditorForm).Methods("POST")
 	r.HandleFunc("/edit/", postBlockEditorForm).Methods("POST")
 	r.HandleFunc("/edit/{blockName}", deleteBlockEditor).Methods("DELETE")
-	//r.HandleFunc("/move/{blockName}/{destinationBlock}", putBlockEditorMove).Methods("POST")
+	r.HandleFunc("/move/{blockName}/{destinationBlock}", putBlockEditorMove).Methods("PUT")
 	r.HandleFunc("/favorite/{blockName}", putBlockEditorFavorite).Methods("PUT")
 	r.HandleFunc("/enable/{blockName}", putBlockEditorEnable).Methods("PUT")
 }

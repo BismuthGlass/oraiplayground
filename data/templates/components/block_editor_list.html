@@ -16,6 +16,7 @@
 		{{ end }}
 		<div class="pblock-item"
 		     data-block-name="{{ .Name }}"
+		     draggable="true"
 		     hx-on::after-settle="event.stopPropagation(); blockEditor.setupRow(this)">
 			<div class="{{ $enabledClass }} op-enabled icon"
 			     hx-put="/story/{{ $storyName }}/blockEditor/enable/{{ .Name }}"
