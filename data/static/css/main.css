@@ -1,37 +1,40 @@
 * {
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    box-sizing: border-box
+	font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+	box-sizing: border-box
 }
 
 html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
 }
 
 textarea {
-    resize: none;
+	resize: none;
 }
 
 .hidden {
-    display: none !important;
+	display: none !important;
 }
 
 .v-flex {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 .h-flex {
-    display:flex;
-    flex-direction: row;
+	display:flex;
+	flex-direction: row;
+}
+.flex-fill {
+	flex: 1
 }
 
 .button-group {
-    color: blue;
+	color: blue;
 }
 .button-group > p {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .tab-headers {
@@ -46,38 +49,38 @@ textarea {
 }
 
 .section {
-    flex: 1;
+	flex: 1;
 }
 
 .separator {
-    height: 1px;
-    background-color: black;
-    margin: 10px 0;
+	height: 1px;
+	background-color: black;
+	margin: 10px 0;
 }
 
 #full-window-div {
-    width: 100%;
-    height: 100%;
-    background-color: lightgray;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    justify-content: stretch;
+	width: 100%;
+	height: 100%;
+	background-color: lightgray;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	justify-content: stretch;
 }
 
 #navigation {
-    flex: 0;
-    border-bottom: 1px solid black;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 10px;
-    column-gap: 2em;
-    color: blue;
+	flex: 0;
+	border-bottom: 1px solid black;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 10px;
+	column-gap: 2em;
+	color: blue;
 }
 #navigation p {
-    margin: 0;
-    cursor: pointer;
+	margin: 0;
+	cursor: pointer;
 }
 #navigation .icon {
 	font-size: 20px;
@@ -90,15 +93,15 @@ textarea {
 }
 
 #full-window-div > .tab {
-    flex: 1;
-    padding: 10px;
-    column-gap: 10px;
-    min-height: 0;
+	flex: 1;
+	padding: 10px;
+	column-gap: 10px;
+	min-height: 0;
 }
 
 #tab-prompt {
-    height: 100%;
-    column-gap: 10px;
+	height: 100%;
+	column-gap: 10px;
 }
 
 .popup {
@@ -125,18 +128,18 @@ textarea {
 }
 
 .context-pane {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr;
-    column-gap: 10px;
-    height: 30%;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto 1fr;
+	column-gap: 10px;
+	height: 30%;
 }
 
 .parameter-grid {
-    display: inline-grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 10px;
-    row-gap: 5px;
+	display: inline-grid;
+	grid-template-columns: 1fr 1fr;
+	column-gap: 10px;
+	row-gap: 5px;
 }
 
 .left-panel {
@@ -151,143 +154,143 @@ textarea {
 }
 
 .block-list {
-    flex: 1;
-    border: 1px solid black;
-    height: 100%;
-    overflow: auto;
+	flex: 1;
+	border: 1px solid black;
+	height: 100%;
+	overflow: auto;
 }
 .block-list p {
-    margin: 0;
+	margin: 0;
 }
 .block-list > div {
-    display: flex;
-    flex: 1;
-    flex-direction: row;
-    padding: 5px 3px;
-    border-bottom: 1px solid black;
+	display: flex;
+	flex: 1;
+	flex-direction: row;
+	padding: 5px 3px;
+	border-bottom: 1px solid black;
 }
 .block-list .in-group {
-    padding-left: 20px;
+	padding-left: 20px;
 }
 .block-list .button-group {
-    display: flex;
-    flex: 1;
-    flex-direction: row;
-    justify-content: end;
-    column-gap: 10px;
+	display: flex;
+	flex: 1;
+	flex-direction: row;
+	justify-content: end;
+	column-gap: 10px;
 }
 .block-list .empty-group {
-    opacity: 0.7;
-    font-style: italic;
+	opacity: 0.7;
+	font-style: italic;
 }
 
 #prompt-block-list .operations {
-    row-gap: 10px;
+	row-gap: 10px;
 }
 
 
 /* Block editor */
 
 .prompt-block-editor p {
-    margin: 0px;
+	margin: 0px;
 }
 .prompt-block-editor textarea {
-    flex: 1;
+	flex: 1;
 }
 
 .prompt-block-editor .info-block {
-    justify-content: stretch;
-    flex: 1;
+	justify-content: stretch;
+	flex: 1;
 }
 
 .prompt-block-editor .align-right {
-    flex: 1;
-    text-align: right;
+	flex: 1;
+	text-align: right;
 }
 
 
 /* Story page */
 
 .tab-story {
-    height: 100%;
-    justify-content: stretch;
-    max-height: 100%;
-    gap: 10px;
+	height: 100%;
+	justify-content: stretch;
+	max-height: 100%;
+	gap: 10px;
 }
 
 .story-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 10px;
-    height: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
+	gap: 10px;
+	height: 100%;
 }
 .story-layout > div {
-    height: 100%;
-    width: 100%;
+	height: 100%;
+	width: 100%;
 }
 
 #ai-response .button-group {
-    column-gap: 2em;
+	column-gap: 2em;
 }
 #ai-response p {
-    margin: 0;
+	margin: 0;
 }
 #ai-response .tab {
-    flex: 1;
+	flex: 1;
 }
 #ai-response textarea {
-    flex: 1;
+	flex: 1;
 }
 
 #chat {
-    display: flex;
-    flex-direction: column;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 3;
+	display: flex;
+	flex-direction: column;
+	grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 1;
+	grid-row-end: 3;
 
-    row-gap: 10px;
+	row-gap: 10px;
 }
 
 #chat .messages {
-    flex: 1;
-    border: 1px solid black;
+	flex: 1;
+	border: 1px solid black;
 }
 #chat .messages .message {
-    padding: 10px;
+	padding: 10px;
 }
 
 #chat .messages .message-header {
-    display: flex;
+	display: flex;
 }
 #chat .messages .message-header .message-role {
-    opacity: 0.5;
+	opacity: 0.5;
 }
 #chat .messages .message-header .message-controls {
-    flex: 1;
-    display: flex;
-    justify-content: end;
-    column-gap: 10px;
+	flex: 1;
+	display: flex;
+	justify-content: end;
+	column-gap: 10px;
 }
 #chat .messages .message-header .message-controls p {
-    margin: 0;
+	margin: 0;
 }
 #chat .messages .message-text {
-    padding: 10px;
+	padding: 10px;
 }
 
 #chat .chat-input {
-    display: flex;
-    flex-direction: column;
-    height: 200px;
+	display: flex;
+	flex-direction: column;
+	height: 200px;
 }
 #chat .chat-input textarea {
-    flex: 1;
-    width: 100%;
+	flex: 1;
+	width: 100%;
 }
 #chat .chat-input .input-header {
-    text-align: right;
+	text-align: right;
 }
 

@@ -1,7 +1,8 @@
 <form class="v-flex pblock-editor"
       data-block-name="{{ .Name }}"
       hx-target="this"
-      hx-swap="outerHTML">
+      hx-swap="outerHTML"
+      hx-on::after-settle="blockEditor.setupEditor(this)">
 	<div class="h-flex">
 		<input type="text" name="name" placeholder="Name" value="{{ .Name }}">
 		<div class="align-right">
@@ -15,12 +16,12 @@
 			</select>
 		</div>
 	</div>
-	<div class="v-flex info-block" data-tab="block">
+	<div class="v-flex flex-fill info-block" data-tab="block">
 		<div>
 			<label>Compiled: </label>
 			<input type="checkbox" name="compiled" {{ if .Compiled }}checked{{ end }}>
 		</div>
-		<textarea placeholder="Prompt..." name="text">{{ .Text }}</textarea>
+		<textarea class="flex-fill" placeholder="Prompt..." name="text">{{ .Text }}</textarea>
 	</div>
 
 	<div class="info">{{ .Message }}</div>

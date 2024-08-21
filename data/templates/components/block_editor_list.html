@@ -16,26 +16,21 @@
 		{{ end }}
 		<div class="pblock-item"
 		     data-block-name="{{ .Name }}"
-		     draggable="true"
-		     hx-on::after-settle="event.stopPropagation(); blockEditor.setupRow(this)">
+		     draggable="true">
 			<div class="{{ $enabledClass }} op-enabled icon"
 			     hx-put="/story/{{ $storyName }}/blockEditor/enable/{{ .Name }}"
-			     hx-target="closest .pblock-item"
-			     hx-select="[data-block-name='{{ .Name }}']"
-			     hx-swap="outerHTML">✓</div>
+			     hx-swap="none">✓</div>
 			<div class="{{ $favoriteClass }} op-favorite icon"
 			     hx-put="/story/{{ $storyName }}/blockEditor/favorite/{{ .Name }}"
-			     hx-target="closest .pblock-item"
-			     hx-select="[data-block-name='{{ .Name }}']"
-			     hx-swap="outerHTML">★</div>
+			     hx-swap="none">★</div>
 			<div class="name">{{ .Name }}</div>
 			<div class="op-delete icon"
 			     hx-delete="/story/{{ $storyName }}/blockEditor/edit/{{ .Name }}"
-			     hx-target="closest .pblock-item"
-			     hx-swap="outerHTML"
+			     hx-swap="none"
 			     hx-trigger="confirmed"
 			     onclick="blockEditor.confirmDelete(this, '{{ .Name }}')">⨯</div> 
-			<div class="op-edit icon">✎</div>
+			<div class="op-edit icon"
+			     onclick="blockEditor.openEditor('{{ .Name }}')">✎</div>
 		</div>
 	{{ end }}
 </div>

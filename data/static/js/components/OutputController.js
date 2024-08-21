@@ -1,5 +1,79 @@
 import { TabController } from "./TabController.js"
 
+const RequestState = {
+	Ready: 0,
+	Pending: 1,
+	Canceled: 2,
+}
+
+function requestAiGen(storyName, cue) {
+	return fetch(`/story/${storyName}/gen`, {
+		method: "POST",
+		body: JSON.stringify({
+			cue: cue
+		})
+	})
+		.then((r) => r.json())
+}
+
+export function setupAiResponseControls(root) {
+	let storyName = document.body.dataset.storyName
+
+	let requestState = RequestState.Ready
+	let requestId = 0
+	let targetTextarea = null
+
+	let generateBt = root.getElementsByClassName("generate-bt")[0]
+	let continueBt = root.getElementsByClassName("continue-bt")[0]
+	let cancelBt = root.getElementsByClassName("cancel-bt")[0]
+	let responseArea = root.getElementsByClassName("response")[0]
+
+	function issueRequest(target, append) {
+		requestState = RequestState.Pending
+		generateBt.disabled = true
+		continueBt.disabled = true
+		targetTextarea = target
+
+		requestAiGen(storyName, "")
+			.then(async (body) => {
+				requestId = body.id
+				cancelBt.disabled = false
+				await fetch(`/story/${storyName}/gen/${body.id}`, {
+					method: "GET",
+				})
+					.then((r) => r.json())
+					.then((body) => {
+						console.log(body)
+						if (body.err) {
+							return
+						}
+						if (append) {
+							target.innerHTML += body.response
+						} else {
+							target.innerHTML = body.response
+						}
+					})
+			})
+			.finally(() => {
+				generateBt.disabled = false
+				continueBt.disabled = false
+				cancelBt.disabled = true
+			})
+	}
+
+	function issueCancel() {
+		requestState = RequestState.Canceled
+		cancelBt.enabled = false
+		fetch(`/story/${storyName}/gen/${requestId}`, {
+			method: "DELETE",
+		})
+	}
+
+	generateBt.addEventListener("click", function() { issueRequest(responseArea, false) })
+	continueBt.addEventListener("click", function() { issueRequest(responseArea, true) })
+	cancelBt.addEventListener("click", function() { issueCancel() })
+}
+
 export class OutputController {
     constructor(root) {
         this.root = root

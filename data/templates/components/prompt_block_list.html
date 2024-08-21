@@ -1,51 +1,25 @@
 <div id="prompt-block-list"
-     hx-target="#block-list"
-     hx-select="#block-list"
+     hx-trigger="updatePlaygroundBlockList from:body"
+     hx-get="/story/{{ .StoryName }}/playground/list"
      hx-swap="outerHTML">
-	<div class="hidden">
-		<form hx-put="/story/{{ .StoryName }}/movePromptBlock"
-		      hx-trigger="prompt-block-list-update">
-			<input name="moveTargetBlock" type="hidden">
-			<input name="moveDestinationBlock" type="hidden">
-			<input name="moveDestinationGroup" type="hidden">
-		</form>
-	</div>
-
-	<div class="operations v-flex">
-		<form class="v-flex"
-		      hx-post="/promptBlock">
-			<input type="text" name="name">
-			<button>New</button>
-		</form>
-		<form class="v-flex"
-		      hx-confirm="Are you sure you want to delete these blocks?"
-		      hx-delete="/story/{{ .StoryName }}/promptBlock">
-			<input type="text" name="blocks" placeholder="block1,block2,..." required>
-			<button>Delete</button>
-		</form>
-	</div>
-
-	<div class="separator"></div>
-
 	<div id="block-list" class="block-list">
 		{{ $storyName := .StoryName }}
 		{{ range $item := .Items }}
-		<div data-name="{{ $item.Name }}"
-		     draggable="true">
-			<div>
-				<input type="checkbox"
-				       {{ if $item.Active }}checked{{ end }}
-				       name="active"
-				       hx-target="#prompt-block-list"
-				       hx-swap="none"
-				       hx-put="/story/{{ $storyName }}/activatePromptBlock"
-				       hx-vals='{"name": "{{ $item.Name }}"}'>
+			{{ $enabledClass := "enabled-no" }}
+			{{ if .Enabled }}
+				{{ $enabledClass = "enabled-yes" }}
+			{{ end }}
+			<div class="pblock-item"
+			     data-block-name="{{ .Name }}"
+			     draggable="true"
+			     hx-on::after-settle="event.stopPropagation(); blockEditor.setupRow(this)">
+				<div class="{{ $enabledClass }} op-enabled icon"
+				     hx-put="/story/{{ $storyName }}/blockEditor/enable/{{ .Name }}"
+				     hx-swap="none">✓</div>
+				<div class="name">{{ .Name }}</div>
+				<div class="op-edit icon"
+				     onclick="playground.openBlock('{{ .Name }}')">✎</div>
 			</div>
-			<p>{{ $item.Name }}</p>
-			<div class="button-group operations">
-				<p>Edit</p>
-			</div>
-		</div>
 		{{ end }}
 	</div>
 </div>

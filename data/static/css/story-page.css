@@ -43,3 +43,8 @@
 #prompt-info textarea {
 	flex: 1;
 }
+
+.pblock-editor {
+	height: 100%;
+}
+

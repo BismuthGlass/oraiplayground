@@ -25,7 +25,7 @@ type story struct {
 	StoryName string
 	Mode models.StoryMode
 	Settings storySettings
-	PromptBlockList promptBlockList
+	PlaygroundBlockList blockEditorList
 	BlockEditorForm blockEditorForm
 	BlockEditorList blockEditorList
 }
@@ -58,7 +58,7 @@ func newStory(s *models.Story) story {
 		StoryName: s.Name,
 		Mode: s.Mode,
 		Settings: newStorySettings(s, nil),
-		PromptBlockList: newPromptBlockList(s),
+		PlaygroundBlockList: newPlaygroundBlockList(s),
 		BlockEditorForm: newBlockEditorForm(s.Name, nil, ""),
 		BlockEditorList: newBlockEditorList(s),
 	}

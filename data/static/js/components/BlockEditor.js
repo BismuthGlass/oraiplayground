@@ -1,137 +1,93 @@
-class BlockEditorList {
-	constructor(root, storyName, deleteCallback, editCallback) {
-		this.root = root
-		this.storyName = storyName
-		this.cbDelete = deleteCallback
-		this.cbEdit = editCallback
-
-		for (let row of root.children) {
-			this.setupRow(row)
-		}
-
-		window.blockEditor.setupRow = this.setupRow.bind(this)
-	}
-
-	setupRow(row) {
-		let blockName = row.dataset.blockName
-		let opFavorite = row.getElementsByClassName("op-favorite")[0]
-		let opDelete = row.getElementsByClassName("op-delete")[0]
-		let opEdit = row.getElementsByClassName("op-edit")[0]
-
-		opEdit.addEventListener("click", () => {
-			this.cbEdit(blockName)
+function setupList(list) {
+	let storyName = document.body.dataset.storyName
+	for (let i of list.children) {
+		i.addEventListener("dragstart", function(e) {
+			e.dataTransfer.clearData()
+			e.dataTransfer.setData("text/plain", i.dataset.blockName)
 		})
+		i.addEventListener("dragover", function(e) { e.preventDefault() })
+		i.addEventListener("drop", function(e) {
+			e.preventDefault()
 
-		row.addEventListener("dragstart", (e) => { this.dragged = e.target })
-		row.addEventListener("dragover", function(e) { e.preventDefault() })
-		row.addEventListener("drop", this.dropHandler.bind(this))
-	}
-
-	dropHandler(e) {
-		e.preventDefault()
-
-		let dragTarget = e.currentTarget
-		if (this.dragged == dragTarget) {
-			return
-		}
-
-		let draggedBlockName = this.dragged.dataset.blockName
-		let targetBlockName = dragTarget.dataset.blockName
-		htmx.ajax("put", `/story/${this.storyName}/blockEditor/move/${draggedBlockName}/${targetBlockName}`, {
-			target: this.root,
-			swap: "outerHTML",
+			let dragTarget = e.currentTarget.dataset.blockName
+			let dragged = e.dataTransfer.getData("text")
+			if (dragged == dragTarget) {
+				return
+			}
+			htmx.ajax("put", `/story/${storyName}/blockEditor/move/${dragged}/${dragTarget}`, { swap: "none" })
 		})
 	}
 }
 
-class BlockEditorForm {
-	constructor(root, storyName) {
-		this.root = root
-		this.storyName = storyName
-		this.blockName = root.dataset.blockName
-		this.edited = false
+function setupEditor(form) {
+	let storyName = document.body.dataset.storyName
 
-		this.saveBt = root.getElementsByClassName("save-bt")[0]
-		this.discardBt = root.getElementsByClassName("discard-bt")[0]
-		this.closeBt = root.getElementsByClassName("close-bt")[0]
-
-		let roleSelect = root.elements["role"]
-		let text = root.elements["text"]
-		let name = root.elements["name"]
-		let compiled = root.elements["compiled"]
-
-		roleSelect.addEventListener("change", this.whenEdited.bind(this))
-		text.addEventListener("keydown", this.whenEdited.bind(this))
-		name.addEventListener("keydown", this.whenEdited.bind(this))
-		compiled.addEventListener("change", this.whenEdited.bind(this))
+	let saveBt = form.getElementsByClassName("save-bt")[0]
+	let discardBt = form.getElementsByClassName("discard-bt")[0]
+	let closeBt = form.getElementsByClassName("close-bt")[0]
+	function whenEdited() {
+		form.dataset.edited = "true"
+		saveBt.disabled = false
+		discardBt.disabled = false
+		closeBt.disabled = true
 	}
+	let roleSelect = form.elements["role"]
+	let text = form.elements["text"]
+	let name = form.elements["name"]
+	let compiled = form.elements["compiled"]
+	roleSelect.addEventListener("change", whenEdited)
+	text.addEventListener("keydown", whenEdited)
+	name.addEventListener("keydown", whenEdited)
+	compiled.addEventListener("change", whenEdited)
+}
 
-	whenEdited() {
-		this.edited = true
-		this.saveBt.disabled = false
-		this.discardBt.disabled = false
-		this.closeBt.disabled = true
-	}
+export function setupBlockEditor(tabRoot) {
+	let storyName = document.body.dataset.storyName
 
-	isEdited() {
-		return this.edited
-	}
-
-	edit(blockName) {
-		htmx.ajax("GET", `/story/${this.storyName}/blockEditor/edit/${blockName}`, {
-			target: this.root,
+	function openEditor(elt, blockName) {
+		htmx.ajax("GET", `/story/${storyName}/blockEditor/edit/${blockName}`, {
+			target: elt,
 			swap: "outerHTML",
 		})
 	}
-}
 
-export class BlockEditorMaster {
-	constructor() {
-		window.blockEditor = {}
-		window.blockEditor.setupList = (e) => {
-			this.list = new BlockEditorList(e, "default", this.deleteBlock.bind(this), this.editBlock.bind(this))
-		}
-		window.blockEditor.confirmDelete = (elt, blockName) => {
-			if (this.editor.blockName == blockName) {
+	window.blockEditor = {}
+	window.blockEditor.setupList = setupList
+	window.blockEditor.confirmDelete = function(elt, blockName) {
+		let editors = document.getElementsById("pblock-editor")
+		for (let e of editors) {
+			if (e.dataset.blockName == blockName) {
 				alert("Block is open for editing")
-			}
-			if (confirm(`Delete ${blockName}?`)) {
-				htmx.trigger(elt, 'confirmed')
+				return
 			}
 		}
-
-		let list = document.getElementsByClassName("pblock-editor-table")[0]
-		let editor = document.getElementsByClassName("pblock-editor")[0]
-		this.list = new BlockEditorList(list, "default", this.deleteBlock.bind(this), this.editBlock.bind(this))
-		this.editor = new BlockEditorForm(editor, "default")
-
-		document.body.addEventListener("htmx:load", (e) => {
-			let elt = e.detail.elt
-			if (elt.classList.contains("pblock-editor")) {
-				this.editor = new BlockEditorForm(elt, "default")
-			}
-		})
+		if (confirm(`Delete ${blockName}?`)) {
+			htmx.trigger(elt, 'confirmed')
+		}
 	}
-
-	deleteBlock(blockName) {
-		if (this.editor.blockName == blockName) {
-			alert("Block is open for editing")
-			return
-		}
-		if (!confirm(`Delete ${blockName}?`)) {
-			return
-		}
-		// TODO: Delete block here
-	}
-
-	editBlock(blockName) {
-		if (this.editor.isEdited()) {
-			if (confirm("Discard changes?")) {
-				this.editor.edit(blockName)
+	window.blockEditor.openEditor = function(blockName) {
+		let editors = tabRoot.getElementsByClassName("pblock-editor")
+		for (let e of editors) {
+			if (e.dataset.blockName == "") {
+				openEditor(e, blockName)
+				return
+			} else if (e.dataset.blockName == blockName) {
+				return
 			}
-		} else {
-			this.editor.edit(blockName)
 		}
+		for (let e of editors) {
+			if (e.dataset.edited != "true") {
+				openEditor(e, blockName)
+				return
+			}
+		}
+	}
+	window.blockEditor.setupEditor = setupEditor
+
+	setupList(tabRoot.getElementsByClassName("pblock-editor-table")[0])
+	let editors = tabRoot.getElementsByClassName("pblock-editor")
+	for (let e of editors) {
+		setupEditor(e)
 	}
 }
 
