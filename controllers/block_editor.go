@@ -58,6 +58,7 @@ func postBlockEditorForm(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Add("HX-Trigger", "updateEditorBlockList")
+	w.Header().Add("HX-Trigger", "updatePlaygroundBlockList")
 
 	if err == nil {
 		block := story.GetPromptBlock(input.Name)
@@ -77,6 +78,9 @@ func deleteBlockEditor(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	story := state.StoryDatabaseService.LockForWrite(vars["storyName"])
 	story.DeletePromptBlock(vars["blockName"])
+
+	w.Header().Add("HX-Trigger", "updateEditorBlockList")
+	w.Header().Add("HX-Trigger", "updatePlaygroundBlockList")
 }
 
 func putBlockEditorFavorite(w http.ResponseWriter, r *http.Request) {
@@ -87,6 +91,8 @@ func putBlockEditorFavorite(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
+	w.Header().Add("HX-Trigger", "updateEditorBlockList")
+	w.Header().Add("HX-Trigger", "updatePlaygroundBlockList")
 	templates.BlockEditorList(w, story)
 }
 
@@ -98,6 +104,8 @@ func putBlockEditorEnable(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
+	w.Header().Add("HX-Trigger", "updateEditorBlockList")
+	w.Header().Add("HX-Trigger", "updatePlaygroundBlockList")
 	templates.BlockEditorList(w, story)
 }
 
@@ -109,6 +117,8 @@ func putBlockEditorMove(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
+	w.Header().Add("HX-Trigger", "updateEditorBlockList")
+	w.Header().Add("HX-Trigger", "updatePlaygroundBlockList")
 	templates.BlockEditorList(w, story)
 }
 
