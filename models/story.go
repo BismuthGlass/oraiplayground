@@ -164,9 +164,20 @@ func (s *Story) MovePromptBlock(name string, ref string) error {
 
 func (s *Story) GetEnabledBlocks() []PromptBlock {
 	preset := s.ActivePreset()
-	list := make([]PromptBlock, 0, len(preset.FavBlocks))
+	list := make([]PromptBlock, 0, len(preset.EnabledBlocks))
 	for _, b := range s.PromptBlocks {
 		if slices.Contains(preset.EnabledBlocks, b.Name) {
+			list = append(list, b)
+		}
+	}
+	return list
+}
+
+func (s *Story) GetFavoriteBlocks() []PromptBlock {
+	preset := s.ActivePreset()
+	list := make([]PromptBlock, 0, len(preset.FavBlocks))
+	for _, b := range s.PromptBlocks {
+		if slices.Contains(preset.FavBlocks, b.Name) {
 			list = append(list, b)
 		}
 	}
