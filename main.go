@@ -27,7 +27,7 @@ func main() {
 
 	aiServerService := services.NewAiServer()
 	storyDatabaseService := services.NewStoryDatabase()
-	storyService := services.NewStory(&aiServerService)
+	storyService := services.NewStory(aiServerService)
 
 	go aiServerService.Run()
 
@@ -44,6 +44,7 @@ func main() {
 			ctx := context.Background()
 			ctx = context.WithValue(ctx, services.StoryDatabaseCtxKey, storyDatabaseService)
 			ctx = context.WithValue(ctx, services.StoryCtxKey, storyService)
+			ctx = context.WithValue(ctx, services.AiServerCtxKey, aiServerService)
 			return ctx
 		},
 	}

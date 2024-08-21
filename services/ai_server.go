@@ -42,8 +42,8 @@ type AiServer struct {
 	Pending []AiServiceClient
 }
 
-func NewAiServer() AiServer {
-	return AiServer{
+func NewAiServer() *AiServer {
+	return &AiServer{
 		OrCon: orai.New(config.ApiKey),
 		Inbound: make(chan *AiServiceClient, 10),
 	}
@@ -63,6 +63,7 @@ func (m *AiServer) Run() {
 				Result: result.Choices[0].Text,
 			}
 		}
+		req.CtxCancelFn()
 
 		m.Lock.Lock()
 		m.removeRequest(req.Id)
